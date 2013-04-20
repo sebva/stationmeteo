@@ -4,11 +4,13 @@ package ch.hearc.meteo.imp.reseau;
 import java.rmi.RemoteException;
 
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
+import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
 import ch.hearc.meteo.spec.reseau.AfficheurManager_I;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
 import com.bilat.tools.reseau.rmi.IdTools;
+import com.bilat.tools.reseau.rmi.RmiTools;
 import com.bilat.tools.reseau.rmi.RmiURL;
 
 /**
@@ -36,20 +38,28 @@ public class AfficheurManager implements AfficheurManager_I
 	/**
 	 * Remote use
 	 */
-	@Override public RmiURL createRemoteAfficheurService(AffichageOptions affichageOptions, RmiURL meteoServiceRmiURL) throws RemoteException
+	@Override
+	public RmiURL createRemoteAfficheurService(AffichageOptions affichageOptions, RmiURL meteoServiceRmiURL) throws RemoteException
 		{
-		MeteoServiceWrapper_I meteoServiceRemote = null;
+		MeteoServiceWrapper_I meteoServiceWrapperRemote = null;
 			// client
 			{
-			// TODO connecion to meteoService on PC-Local with meteoServiceRmiURL
+			try
+				{
+				meteoServiceWrapperRemote = (MeteoServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(meteoServiceRmiURL);
+				}
+			catch (Exception e)
+				{
+				e.printStackTrace();
+				}
 			}
 
 			// server
 			{
-			AfficheurService_I afficheurService = createAfficheurService(affichageOptions, meteoServiceRemote);
-			// TODO share afficheurService
-
+			AfficheurService_I afficheurService = createAfficheurService(affichageOptions, meteoServiceWrapperRemote);
 			RmiURL afficheurServicermiURL = rmiUrl();
+			RmiTools.shareObject(afficheurService, afficheurServicermiURL);
+
 			return afficheurServicermiURL; // Retourner le RMI-ID pour une connection distante sur le serveur d'affichage
 			}
 		}
@@ -74,13 +84,12 @@ public class AfficheurManager implements AfficheurManager_I
 
 	private AfficheurService_I createAfficheurService(AffichageOptions affichageOptions, MeteoServiceWrapper_I meteoServiceRemote)
 		{
-		// TODO
-		return null;
+		return AfficheurFactory.create(affichageOptions, meteoServiceRemote);
 		}
 
 	private void server() throws RemoteException
 		{
-		// TODO share this
+		RmiTools.shareObject(this,new RmiURL(PREFIXE));
 		}
 
 	/*------------------------------*\
@@ -113,5 +122,4 @@ public class AfficheurManager implements AfficheurManager_I
 	private static final String PREFIXE = "AFFICHEUR_SERVICE";
 
 	public static final String RMI_ID = PREFIXE;
-
 	}

@@ -3,6 +3,7 @@ package ch.hearc.meteo.imp.afficheur.simulateur.vue.atome;
 
 import java.awt.Component;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -66,12 +67,23 @@ public class BoxSerieTemporelle extends Box
 
 	private void fill()
 		{
-		for(MeteoEvent meteoEvent:listMeteoEvent)
+		if (listMeteoEvent.size() > 3)
 			{
-			add(new JLabel(MathTools.arrondir(meteoEvent.getValue())));
-			add(Box.createHorizontalStrut(15));
+			ListIterator<MeteoEvent> it = listMeteoEvent.listIterator(listMeteoEvent.size() - 3);
+			while(it.hasNext())
+				{
+				add(new JLabel(MathTools.arrondir(it.next().getValue())));
+				add(Box.createHorizontalStrut(15));
+				}
 			}
-
+		else
+			{
+			for(MeteoEvent meteoEvent:listMeteoEvent)
+				{
+				add(new JLabel(MathTools.arrondir(meteoEvent.getValue())));
+				add(Box.createHorizontalStrut(15));
+				}
+			}
 		}
 
 	private void vider()

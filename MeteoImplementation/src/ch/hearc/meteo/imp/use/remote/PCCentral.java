@@ -1,6 +1,12 @@
 
 package ch.hearc.meteo.imp.use.remote;
 
+import java.rmi.RemoteException;
+
+import ch.hearc.meteo.spec.reseau.AfficheurManagerFactory;
+import ch.hearc.meteo.spec.reseau.AfficheurManager_I;
+
+
 public class PCCentral implements PC_I
 	{
 
@@ -28,7 +34,14 @@ public class PCCentral implements PC_I
 
 	private void server()
 		{
-		// TODO Auto-generated method stub
+		try
+			{
+			AfficheurManager_I afficheurManager = AfficheurManagerFactory.create();
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
 		}
 
 	/*------------------------------------------------------------------*\
