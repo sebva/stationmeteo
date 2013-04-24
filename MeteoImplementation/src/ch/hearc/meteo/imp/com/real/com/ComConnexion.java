@@ -1,12 +1,20 @@
 
 package ch.hearc.meteo.imp.com.real.com;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-
+import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import ch.hearc.meteo.imp.com.logique.MeteoServiceCallback_I;
+import ch.hearc.meteo.imp.com.real.com.trame.TrameDecoder;
+import ch.hearc.meteo.imp.com.real.com.trame.TrameEncoder;
+import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 
 public class ComConnexion implements ComConnexions_I
 	{
@@ -28,44 +36,82 @@ public class ComConnexion implements ComConnexions_I
 
 	@Override public void start() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		serialPort.addEventListener(new SerialPortEventListener()
+		{
+			
+			@Override
+			public void serialEvent(SerialPortEvent event)
+			{
+				if(event.getEventType() != SerialPortEvent.DATA_AVAILABLE)
+					return;
+				
+				try
+				{
+					String trame = reader.readLine();
+					float valeur = TrameDecoder.valeur(reader.readLine());
+					
+					switch(TrameDecoder.dataType(trame))
+					{
+						case ALTITUDE:
+							meteoServiceCallback.altitudePerformed(valeur);
+							break;
+						case PRESSION:
+							meteoServiceCallback.pressionPerformed(valeur);
+							break;
+						case TEMPERATURE:
+							meteoServiceCallback.temperaturePerformed(valeur);
+							break;
+					}
+				}
+				catch (IOException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				catch (MeteoServiceException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		}
 
 	@Override public void stop() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		serialPort.removeEventListener();
 		}
 
 	@Override public void connect() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		serialPort = (SerialPort) CommPortIdentifier.getPortIdentifier(portName).open(getClass().getSimpleName(), 1000);
+		serialPort.setSerialPortParams(comOption.getSpeed(), comOption.getDataBit(), comOption.getStopBit(), comOption.getParity());
+		
+		reader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+		outputStream = serialPort.getOutputStream();
 		}
 
 	@Override public void disconnect() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		serialPort.close();
 		}
 
 	@Override public void askAltitudeAsync() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		String trame = "010200";
+		outputStream.write(TrameEncoder.coder(trame));
 		}
 
 	@Override public void askPressionAsync() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		String trame = "010000";
+		outputStream.write(TrameEncoder.coder(trame));
 		}
 
 	@Override public void askTemperatureAsync() throws Exception
 		{
-		// TODO Auto-generated method stub
-
+		String trame = "010100";
+		outputStream.write(TrameEncoder.coder(trame));
 		}
 
 	/*------------------------------*\
@@ -92,7 +138,7 @@ public class ComConnexion implements ComConnexions_I
 
 	// Tools
 	private SerialPort serialPort;
-	private BufferedWriter writer;
+	private OutputStream outputStream;
 	private BufferedReader reader;
 
 	}
