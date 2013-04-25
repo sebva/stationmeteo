@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import ch.hearc.meteo.imp.afficheur.simulateur.vue.JPanelRoot;
+
 public class JFrameAfficheurService extends JFrame
 	{
 
@@ -28,7 +30,7 @@ public class JFrameAfficheurService extends JFrame
 		{
 		jPanelStations.add(jPanelStation);
 
-		tabbedPane.addTab(jPanelStation.getAfficheurServiceMOO().getTitre(), jPanelStation);
+		tabbedPane.addTab(jPanelStation.getAfficheurServiceMOO().getTitre(), new JPanelRoot(jPanelStation.getAfficheurServiceMOO()));
 		}
 
 	/*------------------------------------------------------------------*\
