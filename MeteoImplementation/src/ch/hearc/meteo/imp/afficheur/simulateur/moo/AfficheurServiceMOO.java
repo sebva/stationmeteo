@@ -30,7 +30,7 @@ public class AfficheurServiceMOO
 		listPression = new LinkedList<MeteoEvent>();
 		listTemperature = new LinkedList<MeteoEvent>();
 
-		isPause = false;
+		isPause = (meteoServiceRemote==null);
 
 		// Outputs
 		statAltitude = new Stat();

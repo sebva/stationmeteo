@@ -21,11 +21,11 @@ import com.bilat.tools.reseau.rmi.RmiURL;
 
 public class PCLocal implements PC_I
 	{
-
+	
 	/*------------------------------------------------------------------*\
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
-
+	
 	public PCLocal(MeteoServiceOptions meteoServiceOptions, String portCom, AffichageOptions affichageOptions, RmiURL rmiURLafficheurManager)
 		{
 		this.meteoServiceOptions = meteoServiceOptions;
@@ -33,11 +33,11 @@ public class PCLocal implements PC_I
 		this.affichageOptions = affichageOptions;
 		this.rmiURLafficheurManager = rmiURLafficheurManager;
 		}
-
+	
 	/*------------------------------------------------------------------*\
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
-
+	
 	@Override
 	public void run()
 		{
@@ -50,7 +50,7 @@ public class PCLocal implements PC_I
 			System.err.println("[PCLocal :  run : server : failed");
 			e.printStackTrace();
 			}
-
+		
 		try
 			{
 			client(); // aprüs
@@ -61,15 +61,15 @@ public class PCLocal implements PC_I
 			e.printStackTrace();
 			}
 		}
-
+	
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
-
+	
 	/*------------------------------*\
 	|*				server			*|
 	\*------------------------------*/
-
+	
 	private void server() throws MeteoServiceException, RemoteException
 		{
 		try
@@ -84,11 +84,11 @@ public class PCLocal implements PC_I
 			e.printStackTrace();
 			}
 		}
-
+	
 	/*------------------------------*\
 	|*				client			*|
 	\*------------------------------*/
-
+	
 	private void client() throws RemoteException
 		{
 		try
@@ -96,11 +96,12 @@ public class PCLocal implements PC_I
 			AfficheurManager_I afficheurManager = AfficheurManagerFactory.create();
 			RmiURL rmiUrlAfficheurManager = afficheurManager.createRemoteAfficheurService(affichageOptions, RMI_URL);
 			final AfficheurService_I afficheurService = (AfficheurService_I)RmiTools.connectionRemoteObjectBloquant(rmiUrlAfficheurManager);
-
+			
 			meteoService.connect();
-
+			
 			meteoService.addMeteoListener(new MeteoListener_I()
 				{
+					
 					@Override
 					public void temperaturePerformed(MeteoEvent event)
 						{
@@ -113,7 +114,7 @@ public class PCLocal implements PC_I
 							e.printStackTrace();
 							}
 						}
-
+					
 					@Override
 					public void pressionPerformed(MeteoEvent event)
 						{
@@ -126,7 +127,7 @@ public class PCLocal implements PC_I
 							e.printStackTrace();
 							}
 						}
-
+					
 					@Override
 					public void altitudePerformed(MeteoEvent event)
 						{
@@ -140,7 +141,7 @@ public class PCLocal implements PC_I
 							}
 						}
 				});
-
+			
 			meteoService.start(meteoServiceOptions);
 			}
 		catch (Exception e)
@@ -148,17 +149,17 @@ public class PCLocal implements PC_I
 			e.printStackTrace();
 			}
 		}
-
+	
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
 	\*------------------------------------------------------------------*/
-
+	
 	// Inputs
 	private MeteoServiceOptions meteoServiceOptions;
 	private String portCom;
 	private AffichageOptions affichageOptions;
 	private RmiURL rmiURLafficheurManager;
-
+	
 	// Tools
 	private MeteoService_I meteoService;
 	private final static String PREFIX = "WRAPPER_";
