@@ -3,7 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/MeteoSpecification"/>
-	<classpathentry exported="true" kind="lib" path="Deploy/ext/RXTXcomm.jar"/>
+	<classpathentry exported="true" kind="lib" path="Deploy/ext/RXTXcomm.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MeteoImplementation/Deploy/ext"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="Deploy/ext/BilatRmiTools.jar"/>
 	<classpathentry kind="lib" path="Deploy/ext/jcommon-1.0.17.jar"/>
 	<classpathentry kind="lib" path="Deploy/ext/jfreechart-1.0.14.jar"/>
