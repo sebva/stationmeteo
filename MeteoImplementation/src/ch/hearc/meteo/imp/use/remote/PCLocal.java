@@ -4,6 +4,7 @@ package ch.hearc.meteo.imp.use.remote;
 import java.rmi.RemoteException;
 
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
+import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
 import ch.hearc.meteo.spec.meteo.MeteoServiceFactory;
 import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
@@ -11,7 +12,6 @@ import ch.hearc.meteo.spec.meteo.MeteoService_I;
 import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 import ch.hearc.meteo.spec.meteo.listener.MeteoListener_I;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
-import ch.hearc.meteo.spec.reseau.AfficheurManagerFactory;
 import ch.hearc.meteo.spec.reseau.AfficheurManager_I;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper;
 
@@ -75,7 +75,7 @@ public class PCLocal implements PC_I
 		try
 			{
 			meteoService = MeteoServiceFactory.create(portCom);
-			MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
+			meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 			RmiTools.shareObject(meteoServiceWrapper, RMI_URL);
 			RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
 			}
@@ -94,9 +94,7 @@ public class PCLocal implements PC_I
 		try
 			{
 			//Local
-			AfficheurManager_I afficheurManager = AfficheurManagerFactory.create();
-			RmiURL rmiUrlAfficheurManagerLocal = afficheurManager.createRemoteAfficheurService(affichageOptions, RMI_URL);
-			final AfficheurService_I afficheurService = (AfficheurService_I)RmiTools.connectionRemoteObjectBloquant(rmiUrlAfficheurManagerLocal);
+			final AfficheurService_I afficheurService = AfficheurFactory.create(affichageOptions, meteoServiceWrapper);
 
 			//Remote
 			AfficheurManager_I afficheurManagerRemote = (AfficheurManager_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
@@ -165,6 +163,7 @@ public class PCLocal implements PC_I
 
 	// Inputs
 	private MeteoServiceOptions meteoServiceOptions;
+	private MeteoServiceWrapper meteoServiceWrapper;
 	private String portCom;
 	private AffichageOptions affichageOptions;
 	private RmiURL rmiURLafficheurManager;
