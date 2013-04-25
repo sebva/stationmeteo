@@ -1,7 +1,7 @@
 
 package ch.hearc.meteo.spec.meteo;
 
-import ch.hearc.meteo.imp.com.simulateur.MeteoServiceSimulateur;
+import ch.hearc.meteo.imp.com.real.MeteoService;
 
 public class MeteoServiceFactory
 	{
@@ -31,7 +31,7 @@ public class MeteoServiceFactory
 		//return null; // TODO
 
 		// Provisoire
-		return new MeteoServiceSimulateur(portName);
+		return new MeteoService(portName);
 		}
 
 	/*------------------------------------------------------------------*\
