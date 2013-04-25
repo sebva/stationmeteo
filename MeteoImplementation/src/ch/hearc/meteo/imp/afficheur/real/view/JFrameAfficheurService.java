@@ -43,6 +43,7 @@ public class JFrameAfficheurService extends JFrame
 	private void geometry()
 		{
 		tabbedPane = new JTabbedPane();
+		add(tabbedPane);
 		}
 
 	private void control()
