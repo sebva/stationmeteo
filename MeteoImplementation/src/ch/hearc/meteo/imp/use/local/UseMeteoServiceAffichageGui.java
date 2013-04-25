@@ -31,7 +31,7 @@ public class UseMeteoServiceAffichageGui
 
 	public static void main() throws MeteoServiceException
 		{
-		String portName = "COM1";
+		String portName = "COM4";
 		String titre = RmiTools.getLocalHost() + " " + portName;
 
 		MeteoService_I meteoService = MeteoServiceFactory.create(portName);

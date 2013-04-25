@@ -2,7 +2,9 @@
 package ch.hearc.meteo.imp.com.real;
 
 import ch.hearc.meteo.imp.com.logique.MeteoService_A;
+import ch.hearc.meteo.imp.com.real.com.ComConnexion;
 import ch.hearc.meteo.imp.com.real.com.ComConnexions_I;
+import ch.hearc.meteo.imp.com.real.com.ComOption;
 import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 
 /**
@@ -14,11 +16,11 @@ import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 public class MeteoService extends MeteoService_A
 	{
 
-	public MeteoService(ComConnexions_I comConnexion)
+	public MeteoService(String portName)
 		{
-		super(comConnexion.getNamePort());
+		super(portName);
 
-		this.comConnexion = comConnexion;
+		this.comConnexion = new ComConnexion(this, portName, new ComOption());
 		}
 
 	/*------------------------------------------------------------------*\
