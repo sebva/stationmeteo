@@ -1,6 +1,7 @@
 
 package ch.hearc.meteo.imp.afficheur.real.view;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -17,6 +18,8 @@ public class JFrameAfficheurService extends JFrame
 
 	public JFrameAfficheurService()
 		{
+		jPanelStations = new LinkedList<JPanelStation>();
+
 		geometry();
 		control();
 		apparence();
