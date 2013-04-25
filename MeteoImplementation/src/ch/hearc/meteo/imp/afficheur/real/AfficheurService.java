@@ -26,7 +26,7 @@ public class AfficheurService implements AfficheurService_I
 			jFrameAfficheurService = new JFrameAfficheurService();
 			}
 
-		if (meteoServiceRemote == null)
+		if (meteoServiceRemote != null)
 			{
 			afficheurServiceMOO = new AfficheurServiceMOO(titre, n, meteoServiceRemote);
 			jPanelStation = new JPanelStation(afficheurServiceMOO);
