@@ -1,9 +1,6 @@
 
 package ch.hearc.meteo.imp.use.remote;
 
-
-
-
 public class UsePCCentral
 	{
 
@@ -26,4 +23,3 @@ public class UsePCCentral
 	\*------------------------------------------------------------------*/
 
 	}
-
