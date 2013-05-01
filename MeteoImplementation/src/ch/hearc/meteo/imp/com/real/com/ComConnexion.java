@@ -37,6 +37,24 @@ public class ComConnexion implements ComConnexions_I
 	@Override
 	public void start() throws Exception
 		{
+
+		}
+
+	@Override
+	public void stop() throws Exception
+		{
+
+		}
+
+	@Override
+	public void connect() throws Exception
+		{
+		serialPort = (SerialPort)CommPortIdentifier.getPortIdentifier(portName).open(getClass().getSimpleName(), 1000);
+		serialPort.setSerialPortParams(comOption.getSpeed(), comOption.getDataBit(), comOption.getStopBit(), comOption.getParity());
+
+		reader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+		outputStream = serialPort.getOutputStream();
+
 		serialPort.notifyOnDataAvailable(true);
 		serialPort.addEventListener(new SerialPortEventListener()
 			{
@@ -81,24 +99,9 @@ public class ComConnexion implements ComConnexions_I
 		}
 
 	@Override
-	public void stop() throws Exception
-		{
-		serialPort.removeEventListener();
-		}
-
-	@Override
-	public void connect() throws Exception
-		{
-		serialPort = (SerialPort)CommPortIdentifier.getPortIdentifier(portName).open(getClass().getSimpleName(), 1000);
-		serialPort.setSerialPortParams(comOption.getSpeed(), comOption.getDataBit(), comOption.getStopBit(), comOption.getParity());
-
-		reader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-		outputStream = serialPort.getOutputStream();
-		}
-
-	@Override
 	public void disconnect() throws Exception
 		{
+		serialPort.removeEventListener();
 		serialPort.close();
 		}
 
@@ -106,8 +109,7 @@ public class ComConnexion implements ComConnexions_I
 	public void askAltitudeAsync() throws Exception
 		{
 		String trame = "010200";
-		byte[] code = TrameEncoder.coder(trame);
-		outputStream.write(code);
+		outputStream.write(TrameEncoder.coder(trame));
 		}
 
 	@Override
