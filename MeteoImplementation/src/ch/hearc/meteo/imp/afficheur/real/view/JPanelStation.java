@@ -4,6 +4,7 @@ package ch.hearc.meteo.imp.afficheur.real.view;
 import javax.swing.JPanel;
 
 import ch.hearc.meteo.imp.afficheur.simulateur.moo.AfficheurServiceMOO;
+import ch.hearc.meteo.imp.afficheur.simulateur.vue.JPanelRoot;
 
 public class JPanelStation extends JPanel
 	{
@@ -45,7 +46,7 @@ public class JPanelStation extends JPanel
 
 	private void geometry()
 		{
-		//Rien
+		add(new JPanelRoot(afficheurServiceMOO));
 		}
 
 	private void control()
