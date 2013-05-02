@@ -5,6 +5,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -26,7 +30,14 @@ public class ComConnexion implements ComConnexions_I
 	public ComConnexion(MeteoServiceCallback_I meteoServiceCallback, String portName, ComOption comOption)
 		{
 		this.comOption = comOption;
-		this.portName = portName;
+		if (portName == null)
+			{
+			autodetectPort();
+			}
+		else
+			{
+			this.portName = portName;
+			}
 		this.meteoServiceCallback = meteoServiceCallback;
 		}
 
@@ -148,6 +159,73 @@ public class ComConnexion implements ComConnexions_I
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
+
+	private void autodetectPort()
+		{
+		Enumeration portIdentifiers = CommPortIdentifier.getPortIdentifiers();
+		while(portIdentifiers.hasMoreElements())
+			{
+			CommPortIdentifier portToTest = (CommPortIdentifier)portIdentifiers.nextElement();
+			testPort(portToTest);
+			if (portName != null) { return; }
+			}
+		}
+
+	private void testPort(final CommPortIdentifier portIdentifier)
+		{
+		try
+			{
+			SerialPort port = (SerialPort)portIdentifier.open(getClass().getSimpleName(), 1000);
+			port.setSerialPortParams(comOption.getSpeed(), comOption.getDataBit(), comOption.getStopBit(), comOption.getParity());
+
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(port.getInputStream()));
+			OutputStream outputStream = port.getOutputStream();
+
+			final CyclicBarrier barrier = new CyclicBarrier(2);
+
+			port.notifyOnDataAvailable(true);
+			port.addEventListener(new SerialPortEventListener()
+				{
+
+					@Override
+					public void serialEvent(final SerialPortEvent event)
+						{
+						try
+							{
+							if (event.getEventType() != SerialPortEvent.DATA_AVAILABLE) { return; }
+
+							String trame = reader.readLine();
+
+							TrameDecoder.valeur(trame);
+							ComConnexion.this.portName = portIdentifier.getName();
+							}
+						catch (Exception e)
+							{
+
+							}
+
+						try
+							{
+							barrier.await();
+							}
+						catch (InterruptedException | BrokenBarrierException e)
+							{
+							e.printStackTrace();
+							}
+						}
+				});
+
+			String trame = "010200";
+			outputStream.write(TrameEncoder.coder(trame));
+
+			barrier.await(2, TimeUnit.SECONDS);
+			port.close();
+			}
+		catch (Exception e)
+			{
+
+			}
+		}
 
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|

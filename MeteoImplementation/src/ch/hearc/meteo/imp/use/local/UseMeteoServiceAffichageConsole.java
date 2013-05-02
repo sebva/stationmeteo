@@ -29,7 +29,7 @@ public class UseMeteoServiceAffichageConsole
 
 	public static void main() throws MeteoServiceException
 		{
-		MeteoService_I meteoService = MeteoServiceFactory.create("COM4");
+		MeteoService_I meteoService = MeteoServiceFactory.create(null);
 
 		meteoService.connect();
 
