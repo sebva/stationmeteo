@@ -1,10 +1,11 @@
 
 package ch.hearc.meteo.imp.afficheur.real.view;
 
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
-import ch.hearc.meteo.imp.afficheur.simulateur.moo.AfficheurServiceMOO;
-import ch.hearc.meteo.imp.afficheur.simulateur.vue.JPanelRoot;
+import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 
 public class JPanelStation extends JPanel
 	{
@@ -20,6 +21,29 @@ public class JPanelStation extends JPanel
 		geometry();
 		control();
 		apparence();
+
+		Thread thread = new Thread(new Runnable()
+			{
+
+				@Override
+				public void run()
+					{
+					while(true)
+						{
+						updateGUI();
+						try
+							{
+							Thread.sleep(1000);
+							}
+						catch (InterruptedException e)
+							{
+							e.printStackTrace();
+							}
+						}
+					}
+			});
+
+		thread.start();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -29,6 +53,12 @@ public class JPanelStation extends JPanel
 	public void refresh()
 		{
 		//TODO: UPDATE DATA
+		jPanelGraph.addData(afficheurServiceMOO.getListTemperature());
+		}
+
+	public void updateGUI()
+		{
+
 		}
 
 	/*------------------------------*\
@@ -46,7 +76,9 @@ public class JPanelStation extends JPanel
 
 	private void geometry()
 		{
-		add(new JPanelRoot(afficheurServiceMOO));
+		jPanelGraph = new JPanelGraph("Température", "Heure", "°C", 30, Color.blue, Color.GRAY);
+		add(jPanelGraph);
+		//add(new JPanelRoot(afficheurServiceMOO));
 		}
 
 	private void control()
@@ -62,6 +94,9 @@ public class JPanelStation extends JPanel
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
 	\*------------------------------------------------------------------*/
+
+	//Tools
+	private JPanelGraph jPanelGraph;
 
 	// Inputs
 	private AfficheurServiceMOO afficheurServiceMOO;

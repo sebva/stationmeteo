@@ -125,6 +125,11 @@ public class AfficheurServiceMOO
 		return this.listTemperature;
 		}
 
+	public MeteoEvent getLastTemperature()
+		{
+		return this.listTemperature.get(listTemperature.size() - 1);
+		}
+
 	public Stat getStatAltitude()
 		{
 		return this.statAltitude;

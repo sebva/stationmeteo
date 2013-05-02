@@ -1,6 +1,7 @@
 
 package ch.hearc.meteo.imp.afficheur.real.view;
 
+import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class JFrameAfficheurService extends JFrame
 		{
 		setTitle("Station météo");
 		setSize(500, 550);
-		setResizable(false);
+		setMinimumSize(new Dimension(500,550));
 		setVisible(true);
 		}
 

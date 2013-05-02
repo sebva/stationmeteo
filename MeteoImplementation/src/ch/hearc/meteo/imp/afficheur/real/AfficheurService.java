@@ -1,9 +1,9 @@
 
 package ch.hearc.meteo.imp.afficheur.real;
 
+import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.view.JFrameAfficheurService;
 import ch.hearc.meteo.imp.afficheur.real.view.JPanelStation;
-import ch.hearc.meteo.imp.afficheur.simulateur.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
