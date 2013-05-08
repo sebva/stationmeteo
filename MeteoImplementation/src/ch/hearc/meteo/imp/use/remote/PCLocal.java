@@ -3,6 +3,8 @@ package ch.hearc.meteo.imp.use.remote;
 
 import java.rmi.RemoteException;
 
+import javax.swing.JOptionPane;
+
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
@@ -32,6 +34,7 @@ public class PCLocal implements PC_I
 		this.portCom = portCom;
 		this.affichageOptions = affichageOptions;
 		this.rmiURLafficheurManager = rmiURLafficheurManager;
+		this.lostConnection = false;
 		}
 
 	/*------------------------------------------------------------------*\
@@ -111,12 +114,15 @@ public class PCLocal implements PC_I
 						{
 						try
 							{
-							afficheurService.printTemperature(event);
-							afficheurServiceRemote.printTemperature(event);
+							if (!lostConnection)
+								{
+								afficheurService.printTemperature(event);
+								afficheurServiceRemote.printTemperature(event);
+								}
 							}
 						catch (RemoteException e)
 							{
-							e.printStackTrace();
+							gestionErreur();
 							}
 						}
 
@@ -125,12 +131,15 @@ public class PCLocal implements PC_I
 						{
 						try
 							{
-							afficheurService.printPression(event);
-							afficheurServiceRemote.printPression(event);
+							if (!lostConnection)
+								{
+								afficheurService.printPression(event);
+								afficheurServiceRemote.printPression(event);
+								}
 							}
 						catch (RemoteException e)
 							{
-							e.printStackTrace();
+							gestionErreur();
 							}
 						}
 
@@ -139,12 +148,15 @@ public class PCLocal implements PC_I
 						{
 						try
 							{
-							afficheurService.printAltitude(event);
-							afficheurServiceRemote.printAltitude(event);
+							if (!lostConnection)
+								{
+								afficheurService.printAltitude(event);
+								afficheurServiceRemote.printAltitude(event);
+								}
 							}
 						catch (RemoteException e)
 							{
-							e.printStackTrace();
+							gestionErreur();
 							}
 						}
 				});
@@ -155,6 +167,13 @@ public class PCLocal implements PC_I
 			{
 			e.printStackTrace();
 			}
+		}
+
+	private void gestionErreur()
+		{
+		lostConnection = true;
+		System.err.println("Connexion perdue. Veuillez relancer une instance !");
+		JOptionPane.showMessageDialog(null, "Connexion perdue. Veuillez relancer une instance !", "Connexion perdue", JOptionPane.ERROR_MESSAGE);
 		}
 
 	/*------------------------------------------------------------------*\
@@ -169,6 +188,7 @@ public class PCLocal implements PC_I
 	private RmiURL rmiURLafficheurManager;
 
 	// Tools
+	private boolean lostConnection;
 	private MeteoService_I meteoService;
 	private final static String PREFIX = "WRAPPER_";
 	private final static RmiURL RMI_URL = new RmiURL(IdTools.createID(PREFIX));

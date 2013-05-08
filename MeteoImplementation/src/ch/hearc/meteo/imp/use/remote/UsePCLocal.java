@@ -51,13 +51,18 @@ public class UsePCLocal
 
 			InetAddress ip = InetAddress.getByName(stringIP);
 			int rmi_port = Integer.valueOf(propertie.getProperty(RMI_PORT));
+			String com_port = propertie.getProperty(COM_PORT);
+			if (com_port == "null")
+				{
+				com_port = null;
+				}
 
 			bis.close();
 			fis.close();
 
 			RmiURL rmiUrl = new RmiURL(AfficheurManager.RMI_ID, ip, rmi_port);
 
-			String portCom = new String("COM1");
+			String portCom = new String(com_port);
 			int rand = (int)(Math.random() * 100);
 			MeteoServiceOptions meteoServiceOptions = new MeteoServiceOptions(100 + rand, 200 + rand, 300 + rand, 400 + rand);
 			AffichageOptions affichageOptions = new AffichageOptions(30, "test - " + String.valueOf(rand));
@@ -86,6 +91,7 @@ public class UsePCLocal
 
 		propertie.setProperty(ADRESSE_IP, "127.0.0.1");
 		propertie.setProperty(RMI_PORT, "" + RmiTools.PORT_RMI_DEFAUT);
+		propertie.setProperty(COM_PORT, "COM1");
 		propertie.store(bos, STORE_NAME);
 
 		bos.close();
@@ -103,6 +109,7 @@ public class UsePCLocal
 	private static final String STORE_NAME = "Ni66A - Station Météo - Options";
 	private static final String ADRESSE_IP = "ADRESSE_IP";
 	private static final String RMI_PORT = "RMI_PORT";
+	private static final String COM_PORT = "COM_PORT";
 	private static final String FILE_PROPERTIES = "settings.ini";
 
 	}
