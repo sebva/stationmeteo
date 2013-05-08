@@ -1,6 +1,8 @@
 
 package ch.hearc.meteo.imp.afficheur.real;
 
+import javax.swing.UIManager;
+
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.view.JFrameAfficheurService;
 import ch.hearc.meteo.imp.afficheur.real.view.JPanelStation;
@@ -21,11 +23,17 @@ public class AfficheurService implements AfficheurService_I
 	 */
 	public AfficheurService(String titre, int n, MeteoServiceWrapper_I meteoServiceRemote)
 		{
-		System.out.println("1");
-
 		if (jFrameAfficheurService == null)
 			{
-			jFrameAfficheurService = new JFrameAfficheurService();
+			try
+				{
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				}
+			catch (Exception e)
+				{
+				e.printStackTrace();
+				}
+			jFrameAfficheurService = new JFrameAfficheurService(meteoServiceRemote);
 			}
 
 		if (meteoServiceRemote != null)

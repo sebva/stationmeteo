@@ -11,7 +11,7 @@ public class Stat
 	public Stat()
 		{
 		// Inputs
-		this.last=0;
+		this.last = 0;
 
 		// Outputs
 		this.min = 0;
@@ -34,12 +34,23 @@ public class Stat
 		last = currentValue;
 		sum += currentValue;
 
-
 		if (compteur >= 2)
 			{
 			min = Math.min(min, currentValue);
 			max = Math.max(max, currentValue);
-			moy=sum/compteur;
+			moy = sum / compteur;
+			if (Math.abs(moy - last) <= 0.5f)
+				{
+				trend = Trend.equal;
+				}
+			else if (last > moy)
+				{
+				trend = Trend.up;
+				}
+			else
+				{
+				trend = Trend.down;
+				}
 			}
 		else
 			{
@@ -73,6 +84,11 @@ public class Stat
 		return last;
 		}
 
+	public Trend getTrend()
+		{
+		return trend;
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
@@ -88,6 +104,7 @@ public class Stat
 	private float min;
 	private float max;
 	private float moy;
+	private Trend trend;
 
 	// Tools
 	private long compteur;

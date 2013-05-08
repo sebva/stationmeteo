@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
-import ch.hearc.meteo.spec.meteo.listener.event.MeteoEventType_E;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
 public class AfficheurServiceMOO
@@ -49,7 +48,7 @@ public class AfficheurServiceMOO
 			manage(listAltitude, event);
 			statAltitude.update(event.getValue());
 
-			afficherConsole(listAltitude, MeteoEventType_E.ALTITUDE.name() + ESPACE + titre);
+			//afficherConsole(listAltitude, MeteoEventType_E.ALTITUDE.name() + ESPACE + titre);
 			}
 		}
 
@@ -60,7 +59,7 @@ public class AfficheurServiceMOO
 			manage(listPression, event);
 			statPression.update(event.getValue());
 
-			afficherConsole(listPression, MeteoEventType_E.PRESSION.name() + ESPACE + titre);
+			//afficherConsole(listPression, MeteoEventType_E.PRESSION.name() + ESPACE + titre);
 			}
 		}
 
@@ -71,7 +70,7 @@ public class AfficheurServiceMOO
 			manage(listTemperature, event);
 			statTemperature.update(event.getValue());
 
-			afficherConsole(listTemperature, MeteoEventType_E.TEMPERATURE.name() + ESPACE + titre);
+			//afficherConsole(listTemperature, MeteoEventType_E.TEMPERATURE.name() + ESPACE + titre);
 			}
 		}
 
@@ -96,6 +95,11 @@ public class AfficheurServiceMOO
 		isPause = etat;
 		}
 
+	public void setN(int n)
+		{
+		this.n = n;
+		}
+
 	/*------------------------------*\
 	|*				Get				*|
 	\*------------------------------*/
@@ -115,9 +119,21 @@ public class AfficheurServiceMOO
 		return this.listAltitude;
 		}
 
+	public MeteoEvent getLastAltitude()
+		{
+		if (listAltitude.size() <= 0) { return null; }
+		return this.listAltitude.get(listAltitude.size() - 1);
+		}
+
 	public List<MeteoEvent> getListPression()
 		{
 		return this.listPression;
+		}
+
+	public MeteoEvent getLastPression()
+		{
+		if (listPression.size() <= 0) { return null; }
+		return this.listPression.get(listPression.size() - 1);
 		}
 
 	public List<MeteoEvent> getListTemperature()
@@ -127,6 +143,7 @@ public class AfficheurServiceMOO
 
 	public MeteoEvent getLastTemperature()
 		{
+		if (listTemperature.size() <= 0) { return null; }
 		return this.listTemperature.get(listTemperature.size() - 1);
 		}
 
@@ -145,17 +162,17 @@ public class AfficheurServiceMOO
 		return this.statTemperature;
 		}
 
+	public int getN()
+		{
+		return this.n;
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
 
 	private void manage(List<MeteoEvent> listMeteoEvent, MeteoEvent event)
 		{
-		if (listMeteoEvent.size() == n)
-			{
-			listMeteoEvent.remove(0);
-			}
-
 		listMeteoEvent.add(event);
 		}
 
