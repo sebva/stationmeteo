@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
+import ch.hearc.meteo.spec.meteo.listener.event.MeteoEventType_E;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
 public class AfficheurServiceMOO
@@ -48,7 +49,7 @@ public class AfficheurServiceMOO
 			manage(listAltitude, event);
 			statAltitude.update(event.getValue());
 
-			//afficherConsole(listAltitude, MeteoEventType_E.ALTITUDE.name() + ESPACE + titre);
+			afficherConsole(listAltitude, MeteoEventType_E.ALTITUDE.name() + ESPACE + titre);
 			}
 		}
 
@@ -59,7 +60,7 @@ public class AfficheurServiceMOO
 			manage(listPression, event);
 			statPression.update(event.getValue());
 
-			//afficherConsole(listPression, MeteoEventType_E.PRESSION.name() + ESPACE + titre);
+			afficherConsole(listPression, MeteoEventType_E.PRESSION.name() + ESPACE + titre);
 			}
 		}
 
@@ -70,7 +71,7 @@ public class AfficheurServiceMOO
 			manage(listTemperature, event);
 			statTemperature.update(event.getValue());
 
-			//afficherConsole(listTemperature, MeteoEventType_E.TEMPERATURE.name() + ESPACE + titre);
+			afficherConsole(listTemperature, MeteoEventType_E.TEMPERATURE.name() + ESPACE + titre);
 			}
 		}
 

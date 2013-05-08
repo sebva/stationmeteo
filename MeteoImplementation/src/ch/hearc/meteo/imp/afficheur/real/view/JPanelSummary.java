@@ -35,7 +35,7 @@ public class JPanelSummary extends JPanel
 						{
 						try
 							{
-							Thread.sleep(1000);
+							Thread.sleep(JFrameAfficheurService.POOLING_DELAY);
 							refresh();
 							}
 						catch (Exception e)

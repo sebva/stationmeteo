@@ -43,7 +43,7 @@ public class JFrameAfficheurService extends JFrame
 						verifyStation();
 						try
 							{
-							Thread.sleep(1000);
+							Thread.sleep(POOLING_DELAY);
 							}
 						catch (InterruptedException e)
 							{
@@ -139,5 +139,6 @@ public class JFrameAfficheurService extends JFrame
 
 	public static final Color BACKGROUND_COLOR = new Color(41, 128, 185);
 	public static final Color FOREGROUND_COLOR = new Color(241, 196, 15);
+	public static final int POOLING_DELAY = 1000;
 
 	}

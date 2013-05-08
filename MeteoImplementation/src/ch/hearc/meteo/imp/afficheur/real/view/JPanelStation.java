@@ -40,7 +40,7 @@ public class JPanelStation extends JPanel
 						updateGUI();
 						try
 							{
-							Thread.sleep(1000);
+							Thread.sleep(JFrameAfficheurService.POOLING_DELAY);
 							}
 						catch (InterruptedException e)
 							{
@@ -59,11 +59,19 @@ public class JPanelStation extends JPanel
 
 	public void refresh()
 		{
-		//TODO: UPDATE DATA
 		jPanelTemperature.refresh();
 		jPanelPression.refresh();
 		Date lastUpdateDate = new Date(afficheurServiceMOO.getLastTemperature().getTime());
 		jLabelLastUpdate.setText("Dernière mise à jour : " + DATE_FORMAT.format(lastUpdateDate));
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(afficheurServiceMOO.getTitre());
+		if (afficheurServiceMOO.getLastAltitude() != null)
+			{
+			stringBuilder.append(" situé à ");
+			stringBuilder.append(afficheurServiceMOO.getLastAltitude().getValue());
+			stringBuilder.append("m d'altitude");
+			}
+		jLabelName.setText(stringBuilder.toString());
 		}
 
 	public void updateGUI()
@@ -119,7 +127,6 @@ public class JPanelStation extends JPanel
 		jPanelPression = new JPanelPression(afficheurServiceMOO);
 		jLabelLastUpdate = new JLabel();
 		jLabelName = new JLabel();
-		jLabelName.setText(afficheurServiceMOO.getTitre());
 
 		add(boxV, BorderLayout.CENTER);
 

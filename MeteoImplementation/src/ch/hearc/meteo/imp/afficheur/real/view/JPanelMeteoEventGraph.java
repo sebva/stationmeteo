@@ -63,7 +63,7 @@ public class JPanelMeteoEventGraph extends JPanel
 							{
 							try
 								{
-								Thread.sleep(1000);
+								Thread.sleep(JFrameAfficheurService.POOLING_DELAY);
 								checkN();
 								}
 							catch (Exception e)
@@ -84,9 +84,10 @@ public class JPanelMeteoEventGraph extends JPanel
 
 	public synchronized void addDatas(List<MeteoEvent> list, String title)
 		{
-		meteoEvents.add(list);
-
 		TimeSeries serie = new TimeSeries(title);
+		serie.setMaximumItemCount(n);
+
+		meteoEvents.add(list);
 		datas.add(serie);
 		dataSet.addSeries(serie);
 		}
@@ -96,6 +97,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		int index = meteoEvents.indexOf(list);
 		dataSet.removeSeries(index);
 		meteoEvents.remove(index);
+		datas.remove(index);
 		}
 
 	public synchronized void refresh()
@@ -117,7 +119,7 @@ public class JPanelMeteoEventGraph extends JPanel
 				ListIterator<MeteoEvent> iterator = meteoEventList.listIterator(meteoEventList.size());
 				while(iterator.hasPrevious() && timeSeries.getItemCount() < n)
 					{
-					MeteoEvent meteoEvent = iterator.previous();
+					MeteoEvent meteoEvent = iterator.previous(); //TODO: ConcurrentModificationException ???
 					timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
 					}
 				}
@@ -162,10 +164,10 @@ public class JPanelMeteoEventGraph extends JPanel
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setDomainZoomable(false);
 		chartPanel.setRangeZoomable(false);
-		jSliderN = new JSlider(5, 500, n);
+		jSliderN = new JSlider(JSLIDER_MIN, JSLIDER_MAX, n);
+		jSliderN.setMajorTickSpacing(JSLIDER_STEP);
 		jSliderN.setPaintTicks(true);
 		jSliderN.setPaintLabels(true);
-		jSliderN.setMajorTickSpacing(20);
 		jSliderN.addChangeListener(new ChangeListener()
 			{
 
@@ -204,6 +206,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		plot.setBackgroundPaint(backgroundColor);
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setRangeGridlinePaint(Color.BLACK);
+		plot.setRangeCrosshairLockedOnData(true);
 
 		DateAxis axis = (DateAxis)plot.getDomainAxis();
 		axis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
@@ -243,5 +246,13 @@ public class JPanelMeteoEventGraph extends JPanel
 	private JSlider jSliderN;
 	private List<TimeSeries> datas;
 	private TimeSeriesCollection dataSet;
+
+	/*------------------------------*\
+	|*			  Static			*|
+	\*------------------------------*/
+
+	private static final int JSLIDER_MIN = 10;
+	private static final int JSLIDER_MAX = 1000;
+	private static final int JSLIDER_STEP = 100;
 
 	}
