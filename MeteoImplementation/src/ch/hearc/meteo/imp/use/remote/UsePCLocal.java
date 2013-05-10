@@ -57,6 +57,9 @@ public class UsePCLocal
 				com_port = null;
 				}
 
+			String name = propertie.getProperty(LOCATION_NAME);
+			String latitude = propertie.getProperty(LATITUDE);
+			String longitude = propertie.getProperty(LONGITUDE);
 			bis.close();
 			fis.close();
 
@@ -65,7 +68,7 @@ public class UsePCLocal
 			String portCom = new String(com_port);
 			int rand = (int)(Math.random() * 100);
 			MeteoServiceOptions meteoServiceOptions = new MeteoServiceOptions(100 + rand, 200 + rand, 300 + rand, 400 + rand);
-			AffichageOptions affichageOptions = new AffichageOptions(30, "test - " + String.valueOf(rand));
+			AffichageOptions affichageOptions = new AffichageOptions(30, name + ";" + latitude + ";" + longitude);
 
 			new PCLocal(meteoServiceOptions, portCom, affichageOptions, rmiUrl).run();
 			}
@@ -92,6 +95,9 @@ public class UsePCLocal
 		propertie.setProperty(ADRESSE_IP, "127.0.0.1");
 		propertie.setProperty(RMI_PORT, "" + RmiTools.PORT_RMI_DEFAUT);
 		propertie.setProperty(COM_PORT, "COM1");
+		propertie.setProperty(LOCATION_NAME, "Neuchâtel");
+		propertie.setProperty(LATITUDE, "6.45");
+		propertie.setProperty(LONGITUDE, "45.666");
 		propertie.store(bos, STORE_NAME);
 
 		bos.close();
@@ -110,6 +116,9 @@ public class UsePCLocal
 	private static final String ADRESSE_IP = "ADRESSE_IP";
 	private static final String RMI_PORT = "RMI_PORT";
 	private static final String COM_PORT = "COM_PORT";
+	private static final String LOCATION_NAME = "LOCATION_NAME";
+	private static final String LATITUDE = "LATITUDE";
+	private static final String LONGITUDE = "LONGITUDE";
 	private static final String FILE_PROPERTIES = "settings.ini";
 
 	}
