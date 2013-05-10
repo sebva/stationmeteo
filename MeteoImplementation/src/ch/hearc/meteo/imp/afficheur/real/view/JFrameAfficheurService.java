@@ -118,8 +118,8 @@ public class JFrameAfficheurService extends JFrame
 		getContentPane().setBackground(BACKGROUND_COLOR);
 		setBackground(BACKGROUND_COLOR);
 		setTitle("Station météo");
-		setSize(500, 550);
-		setMinimumSize(new Dimension(500, 550));
+		setSize(750, 850);
+		setMinimumSize(new Dimension(750, 850));
 		setVisible(true);
 		}
 

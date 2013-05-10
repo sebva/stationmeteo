@@ -28,14 +28,14 @@ import org.jfree.ui.StandardGradientPaintTransformer;
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.moo.Trend;
 
-public class JPanelPression extends JPanel
+public class JPanelPressure extends JPanel
 	{
 
 	/*------------------------------------------------------------------*\
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelPression(AfficheurServiceMOO afficheurServiceMOO)
+	public JPanelPressure(AfficheurServiceMOO afficheurServiceMOO)
 		{
 		this.afficheurServiceMOO = afficheurServiceMOO;
 
@@ -48,8 +48,8 @@ public class JPanelPression extends JPanel
 
 	private void createDataset()
 		{
-		currentPression = new DefaultValueDataset(0.0);
-		meanPression = new DefaultValueDataset(0.0);
+		currentPressure = new DefaultValueDataset(0.0);
+		meanPressure = new DefaultValueDataset(0.0);
 		}
 
 	/*------------------------------------------------------------------*\
@@ -62,11 +62,11 @@ public class JPanelPression extends JPanel
 		float currentTemperatureValue = (afficheurServiceMOO.getLastTemperature() == null) ? 0 : afficheurServiceMOO.getLastTemperature().getValue();
 		float currentAltitudeValue = (afficheurServiceMOO.getLastAltitude() == null) ? 0 : afficheurServiceMOO.getLastAltitude().getValue();
 
-		currentPression.setValue(currentPressionValue);
-		meanPression.setValue(afficheurServiceMOO.getStatPression().getMoy());
-		jLabelPression.setText(String.format("Pression actuel : %.2f", currentPressionValue) + UNITY);
-		jLabelSeeLevelPression.setText(String.format("Pression niveau de la mère : %.2f", reducePressionToSeeLevel(currentPressionValue, currentAltitudeValue, currentTemperatureValue)) + UNITY);
-		jLabelMeanPression.setText(String.format("Ø : %.2f", afficheurServiceMOO.getStatPression().getMoy()) + UNITY);
+		currentPressure.setValue(currentPressionValue);
+		meanPressure.setValue(afficheurServiceMOO.getStatPression().getMoy());
+		jLabelPressure.setText(String.format("Pression actuel : %.2f", currentPressionValue) + UNITY);
+		jLabelSeeLevelPressure.setText(String.format("Pression niveau de la mère : %.2f", reducePressionToSeeLevel(currentPressionValue, currentAltitudeValue, currentTemperatureValue)) + UNITY);
+		jLabelMeanPressure.setText(String.format("Ø : %.2f", afficheurServiceMOO.getStatPression().getMoy()) + UNITY);
 
 		StringBuilder stringBuilder = new StringBuilder();
 
@@ -95,24 +95,19 @@ public class JPanelPression extends JPanel
 		jLabelTrend.setText(stringBuilder.toString());
 		}
 
-	public void updateGUI()
-		{
-
-		}
-
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
 	/**
 	 * http://rosset.org/linux/pressure/howto6.html
 	 */
-	private float reducePressionToSeeLevel(final float pression, final float altitude, final float temperature)
+	private float reducePressionToSeeLevel(final float pressure, final float altitude, final float temperature)
 		{
 		final float ACCELERATION_CONSTANT = 9.80665f;
 		final float AIR_CONSTANT = 287.04f;
 		float temperatureKelvin = temperature + 273.15f;
 
-		return (float)(pression * Math.pow(Math.E, (ACCELERATION_CONSTANT * altitude) / (AIR_CONSTANT * temperatureKelvin)));
+		return (float)(pressure * Math.pow(Math.E, (ACCELERATION_CONSTANT * altitude) / (AIR_CONSTANT * temperatureKelvin)));
 		}
 
 	private void control()
@@ -126,19 +121,19 @@ public class JPanelPression extends JPanel
 
 		Box boxH = Box.createHorizontalBox();
 
-		jLabelPression = new JLabel();
-		jLabelSeeLevelPression = new JLabel();
-		jLabelMeanPression = new JLabel();
+		jLabelPressure = new JLabel();
+		jLabelSeeLevelPressure = new JLabel();
+		jLabelMeanPressure = new JLabel();
 		jLabelTrend = new JLabel();
-		JPanelStation.setJLabelStyle(jLabelPression, 24);
-		JPanelStation.setJLabelStyle(jLabelSeeLevelPression, 24);
-		JPanelStation.setJLabelStyle(jLabelMeanPression, 24);
+		JPanelStation.setJLabelStyle(jLabelPressure, 24);
+		JPanelStation.setJLabelStyle(jLabelSeeLevelPressure, 24);
+		JPanelStation.setJLabelStyle(jLabelMeanPressure, 24);
 		JPanelStation.setJLabelStyle(jLabelTrend, 24);
 		Box boxV = Box.createVerticalBox();
 
-		boxV.add(jLabelPression);
-		boxV.add(jLabelSeeLevelPression);
-		boxV.add(jLabelMeanPression);
+		boxV.add(jLabelPressure);
+		boxV.add(jLabelSeeLevelPressure);
+		boxV.add(jLabelMeanPressure);
 		boxV.add(jLabelTrend);
 
 		SquarePanel squarePanel = new SquarePanel();
@@ -156,8 +151,8 @@ public class JPanelPression extends JPanel
 	private ChartPanel createDial()
 		{
 		DialPlot dialplot = new DialPlot();
-		dialplot.setDataset(0, currentPression);
-		dialplot.setDataset(1, meanPression);
+		dialplot.setDataset(0, currentPressure);
+		dialplot.setDataset(1, meanPressure);
 
 		StandardDialFrame standarddialframe = new StandardDialFrame();
 		standarddialframe.setBackgroundPaint(Color.WHITE);
@@ -174,7 +169,7 @@ public class JPanelPression extends JPanel
 		dialtextannotation.setRadius(0.6);
 		dialplot.addLayer(dialtextannotation);
 
-		StandardDialScale standarddialscale = new StandardDialScale(MIN_PRESSION, MAX_PRESSION, -120.0, -300.0, MAJOR_TICK, MINOR_TICK);
+		StandardDialScale standarddialscale = new StandardDialScale(MIN_PRESSURE, MAX_PRESSURE, -120.0, -300.0, MAJOR_TICK, MINOR_TICK);
 		standarddialscale.setTickRadius(0.9);
 		standarddialscale.setTickLabelOffset(0.18);
 		standarddialscale.setMajorTickPaint(JFrameAfficheurService.FOREGROUND_COLOR);
@@ -184,7 +179,7 @@ public class JPanelPression extends JPanel
 		standarddialscale.setTickLabelPaint(JFrameAfficheurService.FOREGROUND_COLOR);
 		dialplot.addScale(0, standarddialscale);
 
-		StandardDialScale standarddialscale1 = new StandardDialScale(MIN_PRESSION, MAX_PRESSION, -120.0, -300.0, MAJOR_TICK, MINOR_TICK);
+		StandardDialScale standarddialscale1 = new StandardDialScale(MIN_PRESSURE, MAX_PRESSURE, -120.0, -300.0, MAJOR_TICK, MINOR_TICK);
 		standarddialscale1.setTickRadius(0.5);
 		standarddialscale1.setTickLabelOffset(0.15);
 		standarddialscale1.setTickLabelFont(new Font("Dialog", 0, 10));
@@ -228,13 +223,13 @@ public class JPanelPression extends JPanel
 	\*------------------------------------------------------------------*/
 
 	//Inputs
-	private JLabel jLabelMeanPression;
-	private JLabel jLabelPression;
-	private JLabel jLabelSeeLevelPression;
+	private JLabel jLabelMeanPressure;
+	private JLabel jLabelPressure;
+	private JLabel jLabelSeeLevelPressure;
 	private JLabel jLabelTrend;
 	private AfficheurServiceMOO afficheurServiceMOO;
-	private DefaultValueDataset currentPression;
-	private DefaultValueDataset meanPression;
+	private DefaultValueDataset currentPressure;
+	private DefaultValueDataset meanPressure;
 
 	/*------------------------------*\
 	|*			  Static			*|
@@ -242,8 +237,8 @@ public class JPanelPression extends JPanel
 
 	private static final String TITLE = "Pression atmosphérique";
 	private static final String UNITY = "hPa";
-	private static final Double MIN_PRESSION = 970.0;
-	private static final Double MAX_PRESSION = 1060.0;
+	private static final Double MIN_PRESSURE = 970.0;
+	private static final Double MAX_PRESSURE = 1060.0;
 	private static final Double MAJOR_TICK = 10.0;
 	private static final Integer MINOR_TICK = 9;
 
@@ -256,7 +251,7 @@ public class JPanelPression extends JPanel
 		@Override
 		public Dimension getMinimumSize()
 			{
-			return new Dimension(10, 10);
+			return new Dimension(200, 200);
 			}
 
 		@Override
@@ -276,7 +271,7 @@ public class JPanelPression extends JPanel
 				}
 			else
 				{
-				return new Dimension(10, 10);
+				return new Dimension(200, 200);
 				}
 			int w = (int)d.getWidth();
 			int h = (int)d.getHeight();

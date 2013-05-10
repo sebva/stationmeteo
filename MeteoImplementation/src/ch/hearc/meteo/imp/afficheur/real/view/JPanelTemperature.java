@@ -39,12 +39,6 @@ public class JPanelTemperature extends JPanel
 		MeteoEvent meteoEvent = afficheurServiceMOO.getLastTemperature();
 		jLabelTemperature.setText(String.format("%.2f", meteoEvent.getValue()) + "°C");
 		}
-
-	public void updateGUI()
-		{
-
-		}
-
 	/*------------------------------*\
 	|*				Set				*|
 	\*------------------------------*/

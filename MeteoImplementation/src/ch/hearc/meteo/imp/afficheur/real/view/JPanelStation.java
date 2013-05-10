@@ -28,29 +28,6 @@ public class JPanelStation extends JPanel
 		geometry();
 		control();
 		apparence();
-
-		Thread thread = new Thread(new Runnable()
-			{
-
-				@Override
-				public void run()
-					{
-					while(true)
-						{
-						updateGUI();
-						try
-							{
-							Thread.sleep(JFrameAfficheurService.POOLING_DELAY);
-							}
-						catch (InterruptedException e)
-							{
-							e.printStackTrace();
-							}
-						}
-					}
-			});
-
-		thread.start();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -60,7 +37,7 @@ public class JPanelStation extends JPanel
 	public void refresh()
 		{
 		jPanelTemperature.refresh();
-		jPanelPression.refresh();
+		jPanelPressure.refresh();
 		Date lastUpdateDate = new Date(afficheurServiceMOO.getLastTemperature().getTime());
 		jLabelLastUpdate.setText("Dernière mise à jour : " + DATE_FORMAT.format(lastUpdateDate));
 		StringBuilder stringBuilder = new StringBuilder();
@@ -72,12 +49,6 @@ public class JPanelStation extends JPanel
 			stringBuilder.append("m d'altitude");
 			}
 		jLabelName.setText(stringBuilder.toString());
-		}
-
-	public void updateGUI()
-		{
-		jPanelTemperature.updateGUI();
-		jPanelPression.updateGUI();
 		}
 
 	/*------------------------------*\
@@ -124,7 +95,7 @@ public class JPanelStation extends JPanel
 		add(boxV, BorderLayout.CENTER);
 
 		jPanelTemperature = new JPanelTemperature(afficheurServiceMOO);
-		jPanelPression = new JPanelPression(afficheurServiceMOO);
+		jPanelPressure = new JPanelPressure(afficheurServiceMOO);
 		jLabelLastUpdate = new JLabel();
 		jLabelName = new JLabel();
 
@@ -133,7 +104,7 @@ public class JPanelStation extends JPanel
 		boxV.add(jLabelName);
 		boxV.add(jLabelLastUpdate);
 		boxV.add(jPanelTemperature);
-		boxV.add(jPanelPression);
+		boxV.add(jPanelPressure);
 		}
 
 	private void control()
@@ -161,7 +132,7 @@ public class JPanelStation extends JPanel
 	private JLabel jLabelLastUpdate;
 	private JLabel jLabelName;
 	private JPanelTemperature jPanelTemperature;
-	private JPanelPression jPanelPression;
+	private JPanelPressure jPanelPressure;
 
 	/*------------------------------*\
 	|*			  Static			*|

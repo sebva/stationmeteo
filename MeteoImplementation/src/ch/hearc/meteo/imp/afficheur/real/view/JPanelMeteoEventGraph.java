@@ -1,6 +1,7 @@
 
 package ch.hearc.meteo.imp.afficheur.real.view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,9 @@ import javax.swing.event.ChangeListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -33,7 +36,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, int n, Color plotColor, Color backgroundColor, boolean showLegend, AfficheurServiceMOO afficheurServiceMOO)
+	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, int n, Color plotColor, Color backgroundColor, boolean showLegend, AfficheurServiceMOO afficheurServiceMOO)//, Stat stat)
 		{
 		this.title = title;
 		this.xLabel = xLabel;
@@ -43,6 +46,8 @@ public class JPanelMeteoEventGraph extends JPanel
 		this.backgroundColor = backgroundColor;
 		this.showLegend = showLegend;
 		this.afficheurServiceMOO = afficheurServiceMOO;
+		lowerRange = 0.0;
+		upperRange = 0.0;
 
 		this.datas = new ArrayList<TimeSeries>();
 		this.meteoEvents = new ArrayList<List<MeteoEvent>>();
@@ -114,6 +119,7 @@ public class JPanelMeteoEventGraph extends JPanel
 					{
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
 					timeSeries.addOrUpdate(new Millisecond(new Date(lastMeteoEvent.getTime())), lastMeteoEvent.getValue());
+					computeRange(lastMeteoEvent.getValue());
 					}
 
 				ListIterator<MeteoEvent> iterator = meteoEventList.listIterator(meteoEventList.size());
@@ -121,10 +127,12 @@ public class JPanelMeteoEventGraph extends JPanel
 					{
 					MeteoEvent meteoEvent = iterator.previous(); //TODO: ConcurrentModificationException ???
 					timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
+					computeRange(meteoEvent.getValue());
 					}
 				}
 			i++;
 			}
+		setRange();
 		}
 
 	/*------------------------------*\
@@ -211,6 +219,10 @@ public class JPanelMeteoEventGraph extends JPanel
 		DateAxis axis = (DateAxis)plot.getDomainAxis();
 		axis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
 		plot.getRenderer().setSeriesPaint(0, plotColor);
+		plot.getRenderer().setBaseStroke(new BasicStroke(2));
+		((AbstractRenderer)plot.getRenderer()).setAutoPopulateSeriesStroke(false);
+		rangeAxis = plot.getRangeAxis();
+		setRange();
 
 		return chart;
 		}
@@ -223,6 +235,29 @@ public class JPanelMeteoEventGraph extends JPanel
 			jSliderN.setValue(n);
 			setN(n);
 			}
+		}
+
+	private void computeRange(float value)
+		{
+		if (upperRange < value)
+			{
+			upperRange = value;
+			}
+		else if (lowerRange > value)
+			{
+			lowerRange = value;
+			}
+		}
+
+	private void setRange()
+		{
+		double max = (Math.abs(lowerRange) > Math.abs(upperRange)) ? Math.abs(lowerRange) : Math.abs(upperRange);
+		double offset = max * (OFFSET_RANGE_PERCENT / 100);
+		if (offset < OFFSET_RANGE_MIN)
+			{
+			offset = OFFSET_RANGE_MIN;
+			}
+		rangeAxis.setRange(lowerRange - offset, upperRange + offset);
 		}
 
 	/*------------------------------------------------------------------*\
@@ -246,6 +281,9 @@ public class JPanelMeteoEventGraph extends JPanel
 	private JSlider jSliderN;
 	private List<TimeSeries> datas;
 	private TimeSeriesCollection dataSet;
+	private double lowerRange;
+	private double upperRange;
+	private ValueAxis rangeAxis;
 
 	/*------------------------------*\
 	|*			  Static			*|
@@ -254,5 +292,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	private static final int JSLIDER_MIN = 10;
 	private static final int JSLIDER_MAX = 1000;
 	private static final int JSLIDER_STEP = 100;
+	private static final double OFFSET_RANGE_MIN = 1.0;
+	private static final double OFFSET_RANGE_PERCENT = 5.0;
 
 	}
