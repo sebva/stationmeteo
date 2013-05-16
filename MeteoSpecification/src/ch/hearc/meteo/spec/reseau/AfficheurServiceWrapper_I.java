@@ -22,5 +22,5 @@ public interface AfficheurServiceWrapper_I extends Remote
 
 	public void printTemperature(MeteoEvent event) throws RemoteException;
 
-	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions);
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)  throws RemoteException;
 	}

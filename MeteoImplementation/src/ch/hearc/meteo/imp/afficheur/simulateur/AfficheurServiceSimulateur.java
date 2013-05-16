@@ -1,6 +1,8 @@
 
 package ch.hearc.meteo.imp.afficheur.simulateur;
 
+import java.rmi.RemoteException;
+
 import ch.hearc.meteo.imp.afficheur.simulateur.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.simulateur.vue.JFrameAfficheurService;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
@@ -55,7 +57,14 @@ public class AfficheurServiceSimulateur implements AfficheurService_I
 	@Override
 	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
 		{
-		afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
+		try
+			{
+			afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
 		}
 
 	/*------------------------------------------------------------------*\

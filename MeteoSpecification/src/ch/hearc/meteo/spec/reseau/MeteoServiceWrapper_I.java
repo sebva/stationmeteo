@@ -25,7 +25,7 @@ public interface MeteoServiceWrapper_I extends Remote
 
 	public boolean isConnect() throws RemoteException;
 
-	public MeteoServiceOptions getMeteoServiceOptions();
+	public MeteoServiceOptions getMeteoServiceOptions() throws RemoteException;
 
-	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions);
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions) throws RemoteException;
 	}

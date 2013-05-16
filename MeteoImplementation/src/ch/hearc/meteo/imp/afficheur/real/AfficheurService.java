@@ -1,6 +1,8 @@
 
 package ch.hearc.meteo.imp.afficheur.real;
 
+import java.rmi.RemoteException;
+
 import javax.swing.UIManager;
 
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
@@ -78,7 +80,14 @@ public class AfficheurService implements AfficheurService_I
 	@Override
 	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
 		{
-		afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
+		try
+			{
+			afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
 		}
 
 	/*------------------------------------------------------------------*\
