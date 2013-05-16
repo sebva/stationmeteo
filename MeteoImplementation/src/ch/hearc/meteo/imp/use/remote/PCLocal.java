@@ -2,6 +2,8 @@
 package ch.hearc.meteo.imp.use.remote;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -32,6 +34,7 @@ public class PCLocal implements PC_I
 	public PCLocal(MeteoServiceOptions meteoServiceOptions, String portCom, AffichageOptions affichageOptions, RmiURL rmiURLafficheurManager)
 		{
 		this.meteoServiceOptions = meteoServiceOptions;
+		this.meteoServices = new ArrayList<MeteoService_I>();
 		this.portCom = portCom;
 		this.affichageOptions = affichageOptions;
 		this.rmiURLafficheurManager = rmiURLafficheurManager;
@@ -78,7 +81,8 @@ public class PCLocal implements PC_I
 		{
 		try
 			{
-			meteoService = MeteoServiceFactory.create(portCom);
+			MeteoService_I meteoService = MeteoServiceFactory.create(portCom);
+			meteoServices.add(meteoService);
 			meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 			RmiTools.shareObject(meteoServiceWrapper, RMI_URL);
 			RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
@@ -105,64 +109,67 @@ public class PCLocal implements PC_I
 			RmiURL rmiUrlAfficheurManagerRemote = afficheurManagerRemote.createRemoteAfficheurService(affichageOptions, RMI_URL);
 			final AfficheurServiceWrapper_I afficheurServiceRemote = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiUrlAfficheurManagerRemote);
 
-			meteoService.connect();
-
-			meteoService.addMeteoListener(new MeteoListener_I()
+			for(MeteoService_I meteoService:meteoServices)
 				{
+				meteoService.connect();
 
-					@Override
-					public void temperaturePerformed(MeteoEvent event)
-						{
-						try
+				meteoService.addMeteoListener(new MeteoListener_I()
+					{
+
+						@Override
+						public void temperaturePerformed(MeteoEvent event)
 							{
-							if (!lostConnection)
+							try
 								{
-								afficheurService.printTemperature(event);
-								afficheurServiceRemote.printTemperature(event);
+								if (!lostConnection)
+									{
+									afficheurService.printTemperature(event);
+									afficheurServiceRemote.printTemperature(event);
+									}
+								}
+							catch (RemoteException e)
+								{
+								gestionErreur();
 								}
 							}
-						catch (RemoteException e)
-							{
-							gestionErreur();
-							}
-						}
 
-					@Override
-					public void pressionPerformed(MeteoEvent event)
-						{
-						try
+						@Override
+						public void pressionPerformed(MeteoEvent event)
 							{
-							if (!lostConnection)
+							try
 								{
-								afficheurService.printPression(event);
-								afficheurServiceRemote.printPression(event);
+								if (!lostConnection)
+									{
+									afficheurService.printPression(event);
+									afficheurServiceRemote.printPression(event);
+									}
+								}
+							catch (RemoteException e)
+								{
+								gestionErreur();
 								}
 							}
-						catch (RemoteException e)
-							{
-							gestionErreur();
-							}
-						}
 
-					@Override
-					public void altitudePerformed(MeteoEvent event)
-						{
-						try
+						@Override
+						public void altitudePerformed(MeteoEvent event)
 							{
-							if (!lostConnection)
+							try
 								{
-								afficheurService.printAltitude(event);
-								afficheurServiceRemote.printAltitude(event);
+								if (!lostConnection)
+									{
+									afficheurService.printAltitude(event);
+									afficheurServiceRemote.printAltitude(event);
+									}
+								}
+							catch (RemoteException e)
+								{
+								gestionErreur();
 								}
 							}
-						catch (RemoteException e)
-							{
-							gestionErreur();
-							}
-						}
-				});
+					});
 
-			meteoService.start(meteoServiceOptions);
+				meteoService.start(meteoServiceOptions);
+				}
 			}
 		catch (Exception e)
 			{
@@ -190,7 +197,7 @@ public class PCLocal implements PC_I
 
 	// Tools
 	private boolean lostConnection;
-	private MeteoService_I meteoService;
+	private List<MeteoService_I> meteoServices;
 	private final static String PREFIX = "WRAPPER_";
 	private final static RmiURL RMI_URL = new RmiURL(IdTools.createID(PREFIX));
 	}
