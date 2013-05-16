@@ -21,7 +21,14 @@ public class AfficheurServiceMOO
 		{
 		// Inputs
 		this.n = n;
-		this.titre = titre;
+		String[] infos = titre.split(";");
+		int nbInfos = infos.length;
+		if(nbInfos >= 3)
+			{
+			this.longitude = Double.valueOf(infos[nbInfos - 2]);
+			this.latitude = Double.valueOf(infos[nbInfos - 1]);
+			}
+		this.titre = infos[0];
 		this.meteoServiceRemote = meteoServiceRemote;
 
 		//Tools
@@ -167,6 +174,16 @@ public class AfficheurServiceMOO
 		return this.n;
 		}
 
+	public double getLongitude()
+		{
+		return this.longitude;
+		}
+
+	public double getLatitude()
+		{
+		return this.latitude;
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
@@ -198,6 +215,8 @@ public class AfficheurServiceMOO
 	// Inputs
 	private int n;
 	private String titre;
+	private double longitude;
+	private double latitude;
 	private MeteoServiceWrapper_I meteoServiceRemote;
 
 	// Tools

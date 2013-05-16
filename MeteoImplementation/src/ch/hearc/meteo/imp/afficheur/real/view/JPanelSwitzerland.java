@@ -2,6 +2,11 @@
 package ch.hearc.meteo.imp.afficheur.real.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +15,14 @@ import javax.swing.JPanel;
 
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 
-public class JPanelSummary extends JPanel
+public class JPanelSwitzerland extends JPanel
 	{
 
 	/*------------------------------------------------------------------*\
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelSummary()
+	public JPanelSwitzerland()
 		{
 		this.afficheurServiceMOOs = new ArrayList<AfficheurServiceMOO>();
 
@@ -55,30 +60,28 @@ public class JPanelSummary extends JPanel
 
 	public void refresh()
 		{
-		jPanelMeteoEventGraphTemperature.refresh();
-		jPanelMeteoEventGraphAltitude.refresh();
-		jPanelMeteoEventGraphPression.refresh();
-		}
-
-	public void updateGUI()
-		{
-
+		repaint();
 		}
 
 	public void addAfficheurServiceMOO(AfficheurServiceMOO afficheurServiceMOO)
 		{
-		jPanelMeteoEventGraphTemperature.addDatas(afficheurServiceMOO.getListTemperature(), afficheurServiceMOO.getTitre());
-		jPanelMeteoEventGraphAltitude.addDatas(afficheurServiceMOO.getListAltitude(), afficheurServiceMOO.getTitre());
-		jPanelMeteoEventGraphPression.addDatas(afficheurServiceMOO.getListPression(), afficheurServiceMOO.getTitre());
 		afficheurServiceMOOs.add(afficheurServiceMOO);
 		}
 
 	public void removeAfficheurServiceMOO(AfficheurServiceMOO afficheurServiceMOO)
 		{
-		jPanelMeteoEventGraphTemperature.removeDatas(afficheurServiceMOO.getListTemperature());
-		jPanelMeteoEventGraphAltitude.removeDatas(afficheurServiceMOO.getListAltitude());
-		jPanelMeteoEventGraphPression.removeDatas(afficheurServiceMOO.getListPression());
 		afficheurServiceMOOs.remove(afficheurServiceMOO);
+		}
+
+	@Override
+	protected void paintComponent(Graphics g)
+		{
+		super.paintComponent(g);
+
+		Graphics2D g2d = (Graphics2D)g;
+		AffineTransform transformOld = g2d.getTransform();
+		draw(g2d);
+		g2d.setTransform(transformOld);
 		}
 
 	/*------------------------------------------------------------------*\
@@ -96,15 +99,7 @@ public class JPanelSummary extends JPanel
 
 		Box boxV = Box.createVerticalBox();
 
-		jPanelMeteoEventGraphTemperature = new JPanelMeteoEventGraph(TITLE_TEMPERATURE, X_LABEL, Y_LABEL_TEMPERATURE, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, true, null);
-		jPanelMeteoEventGraphAltitude = new JPanelMeteoEventGraph(TITLE_ALTITUDE, X_LABEL, Y_LABEL_ALTITUDE, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, true, null);
-		jPanelMeteoEventGraphPression = new JPanelMeteoEventGraph(TITLE_PRESSION, X_LABEL, Y_LABEL_PRESSION, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, true, null);
-
 		add(boxV, BorderLayout.CENTER);
-
-		boxV.add(jPanelMeteoEventGraphTemperature);
-		boxV.add(jPanelMeteoEventGraphPression);
-		boxV.add(jPanelMeteoEventGraphAltitude);
 		}
 
 	private void apparence()
@@ -112,14 +107,36 @@ public class JPanelSummary extends JPanel
 		setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
 		}
 
+	private void draw(Graphics2D g2d)
+		{
+		g2d.setColor(Color.red);
+		for(AfficheurServiceMOO afficheurServiceMOO:afficheurServiceMOOs)
+			{
+			Point point = positionOnScreenForCoordinate(afficheurServiceMOO.getLongitude(), afficheurServiceMOO.getLatitude());
+			System.out.println(point);
+			g2d.fillOval(point.x, point.y, 10, 10);
+			}
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
 	\*------------------------------------------------------------------*/
 
-	//Outputs
-	private JPanelMeteoEventGraph jPanelMeteoEventGraphTemperature;
-	private JPanelMeteoEventGraph jPanelMeteoEventGraphAltitude;
-	private JPanelMeteoEventGraph jPanelMeteoEventGraphPression;
+	private Point positionOnScreenForCoordinate(final double LONGITUDE, final double LATITUDE)
+		{
+		double longitudePositionInPercent = 1 - (MAX_LONGITUDE - LONGITUDE) / (MAX_LONGITUDE - MIN_LONGITUDE);
+		double latitudePositionInPercent = 1 - (MAX_LATITUDE - LATITUDE) / (MAX_LATITUDE - MIN_LATITUDE);
+
+		System.out.println("LONGITUDE : " + LONGITUDE);
+		System.out.println("LATITUDE : " + LATITUDE);
+		System.out.println("longitudePositionInPercent : " + longitudePositionInPercent);
+		System.out.println("latitudePositionInPercent : " + latitudePositionInPercent);
+
+		int x = (int)(this.getWidth() * longitudePositionInPercent);
+		int y = (int)(this.getHeight() * latitudePositionInPercent);
+
+		return new Point(x, y);
+		}
 
 	//Inputs
 	private List<AfficheurServiceMOO> afficheurServiceMOOs;
@@ -128,11 +145,9 @@ public class JPanelSummary extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final String TITLE_TEMPERATURE = "Température";
-	private static final String TITLE_ALTITUDE = "Altitude";
-	private static final String TITLE_PRESSION = "Pression";
-	private static final String X_LABEL = "Heure";
-	private static final String Y_LABEL_TEMPERATURE = "°C";
-	private static final String Y_LABEL_ALTITUDE = "m";
-	private static final String Y_LABEL_PRESSION = "hPa";
+	private static final double MIN_LONGITUDE = 5.933904;
+	private static final double MAX_LONGITUDE = 10.505933;
+	private static final double MIN_LATITUDE = 45.801967;
+	private static final double MAX_LATITUDE = 47.835252;
+
 	}

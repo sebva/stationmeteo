@@ -67,6 +67,7 @@ public class JFrameAfficheurService extends JFrame
 			{
 			tabbedPane.addTab(jPanelStation.getAfficheurServiceMOO().getTitre(), jPanelStation);
 			jPanelSummary.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
+			jPanelSwitzerland.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 			}
 		else
 			{
@@ -82,6 +83,7 @@ public class JFrameAfficheurService extends JFrame
 			if (!jPanelStation.isConnected())
 				{
 				jPanelSummary.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
+				jPanelSwitzerland.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 				tabbedPane.remove(jPanelStation);
 				panelStationsToRemove.add(jPanelStation);
 				}
@@ -103,7 +105,9 @@ public class JFrameAfficheurService extends JFrame
 			tabbedPane = new JTabbedPane();
 			add(tabbedPane);
 			jPanelSummary = new JPanelSummary();
+			jPanelSwitzerland = new JPanelSwitzerland();
 			tabbedPane.add("Summary", jPanelSummary);
+			tabbedPane.add("Maps", jPanelSwitzerland);
 			}
 		}
 
@@ -131,6 +135,7 @@ public class JFrameAfficheurService extends JFrame
 	private List<JPanelStation> jPanelStations;
 	private JTabbedPane tabbedPane;
 	private JPanelSummary jPanelSummary;
+	private JPanelSwitzerland jPanelSwitzerland;
 	private boolean isPCCentral;
 
 	/*------------------------------*\
