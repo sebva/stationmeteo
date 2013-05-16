@@ -12,25 +12,25 @@ import javax.swing.JTabbedPane;
 
 public class JFrameAfficheurService extends JFrame
 	{
-	
+
 	/*------------------------------------------------------------------*\
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
-	
+
 	/**
 	 * Si meteoServiceRemote est null, alors on est le serveur et on affiche des tabs
 	 */
 	public JFrameAfficheurService()
 		{
 		jPanelStations = new LinkedList<JPanelStation>();
-		
+
 		geometry();
 		control();
 		apparence();
-		
+
 		Thread thread = new Thread(new Runnable()
 			{
-				
+
 				@Override
 				public void run()
 					{
@@ -48,14 +48,14 @@ public class JFrameAfficheurService extends JFrame
 						}
 					}
 			});
-		
+
 		thread.start();
 		}
-	
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
-	
+
 	public synchronized void addNewStation(JPanelStation jPanelStation)
 		{
 		jPanelStations.add(jPanelStation);
@@ -63,7 +63,7 @@ public class JFrameAfficheurService extends JFrame
 		jPanelSummary.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 		jPanelSwitzerland.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 		}
-	
+
 	public synchronized void verifyStation()
 		{
 		List<JPanelStation> panelStationsToRemove = new ArrayList<JPanelStation>();
@@ -82,11 +82,11 @@ public class JFrameAfficheurService extends JFrame
 			jPanelStations.remove(jPanelStation);
 			}
 		}
-	
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
-	
+
 	private void geometry()
 		{
 		tabbedPane = new JTabbedPane();
@@ -96,12 +96,12 @@ public class JFrameAfficheurService extends JFrame
 		tabbedPane.add("Summary", jPanelSummary);
 		tabbedPane.add("Maps", jPanelSwitzerland);
 		}
-	
+
 	private void control()
 		{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		}
-	
+
 	private void apparence()
 		{
 		setBackground(BACKGROUND_COLOR);
@@ -112,11 +112,11 @@ public class JFrameAfficheurService extends JFrame
 		setMinimumSize(new Dimension(750, 850));
 		setVisible(true);
 		}
-	
+
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
 	\*------------------------------------------------------------------*/
-	
+
 	//Tools
 	private List<JPanelStation> jPanelStations;
 	private JTabbedPane tabbedPane;
@@ -125,9 +125,8 @@ public class JFrameAfficheurService extends JFrame
 	/*------------------------------*\
 	|*			  Static			*|
 	\*------------------------------*/
-	
+
 	public static final Color BACKGROUND_COLOR = new Color(41, 128, 185);
 	public static final Color FOREGROUND_COLOR = new Color(241, 196, 15);
 	public static final int POOLING_DELAY = 1000;
-	
 	}

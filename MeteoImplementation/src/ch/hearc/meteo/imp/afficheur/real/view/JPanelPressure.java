@@ -58,23 +58,25 @@ public class JPanelPressure extends JPanel
 
 	public void refresh()
 		{
-		float currentPressionValue = (afficheurServiceMOO.getLastPression() == null) ? 0 : afficheurServiceMOO.getLastPression().getValue();
+		float currentPressureValue = (afficheurServiceMOO.getLastPression() == null) ? 0 : afficheurServiceMOO.getLastPression().getValue();
 		float currentTemperatureValue = (afficheurServiceMOO.getLastTemperature() == null) ? 0 : afficheurServiceMOO.getLastTemperature().getValue();
 		float currentAltitudeValue = (afficheurServiceMOO.getLastAltitude() == null) ? 0 : afficheurServiceMOO.getLastAltitude().getValue();
 
-		currentPressure.setValue(currentPressionValue);
-		meanPressure.setValue(afficheurServiceMOO.getStatPression().getMoy());
-		jLabelPressure.setText(String.format("Pression actuel : %.2f", currentPressionValue) + UNITY);
-		jLabelSeeLevelPressure.setText(String.format("Pression niveau de la mère : %.2f", reducePressionToSeeLevel(currentPressionValue, currentAltitudeValue, currentTemperatureValue)) + UNITY);
+
+
+		currentPressure.setValue(reducePressionToSeeLevel(currentPressureValue, currentAltitudeValue, currentTemperatureValue));
+		meanPressure.setValue(reducePressionToSeeLevel(afficheurServiceMOO.getStatPression().getMoy(), currentAltitudeValue, currentTemperatureValue));
+		jLabelPressure.setText(String.format("Pression actuel : %.2f", currentPressureValue) + UNITY);
+		jLabelSeeLevelPressure.setText(String.format("Pression niveau de la mer : %.2f", reducePressionToSeeLevel(currentPressureValue, currentAltitudeValue, currentTemperatureValue)) + UNITY);
 		jLabelMeanPressure.setText(String.format("Ø : %.2f", afficheurServiceMOO.getStatPression().getMoy()) + UNITY);
 
 		StringBuilder stringBuilder = new StringBuilder();
 
-		if (currentPressionValue < 1000)
+		if (currentPressureValue < 1000)
 			{
 			stringBuilder.append("Pluie");
 			}
-		else if (currentPressionValue > 1030)
+		else if (currentPressureValue > 1030)
 			{
 			stringBuilder.append("Beau");
 			}

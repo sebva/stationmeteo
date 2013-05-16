@@ -117,20 +117,19 @@ public class JPanelMeteoEventGraph extends JPanel
 				TimeSeries timeSeries = datas.get(i);
 				if (meteoEventList.size() > 0)
 					{
-					int indexFirstVale = (n <= meteoEventList.size()) ? n : meteoEventList.size();
-					upperRange = lowerRange = meteoEventList.get(indexFirstVale - 1).getValue();
-
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
 					timeSeries.addOrUpdate(new Millisecond(new Date(lastMeteoEvent.getTime())), lastMeteoEvent.getValue());
-					computeRange(lastMeteoEvent.getValue());
+					computeRangeByNewValue(lastMeteoEvent.getValue());
 					}
 
 				ListIterator<MeteoEvent> iterator = meteoEventList.listIterator(meteoEventList.size());
-				while(iterator.hasPrevious() && timeSeries.getItemCount() < n)
+				int j = 0;
+				while(iterator.hasPrevious() && j < n)
 					{
 					MeteoEvent meteoEvent = iterator.previous(); //TODO: ConcurrentModificationException ???
 					timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
-					computeRange(meteoEvent.getValue());
+					computeRangeByNewValue(meteoEvent.getValue());
+					j++;
 					}
 				}
 			i++;
@@ -240,13 +239,25 @@ public class JPanelMeteoEventGraph extends JPanel
 			}
 		}
 
-	private void computeRange(float value)
+	private void computeRangeByNewValue(float value)
 		{
 		if (upperRange < value)
 			{
 			upperRange = value;
 			}
 		else if (lowerRange > value)
+			{
+			lowerRange = value;
+			}
+		}
+
+	private void computeRangeByRemoveValue(float valueRemoved, float value)
+		{
+		if (upperRange == valueRemoved)
+			{
+			upperRange = value;
+			}
+		else if (lowerRange == valueRemoved)
 			{
 			lowerRange = value;
 			}
