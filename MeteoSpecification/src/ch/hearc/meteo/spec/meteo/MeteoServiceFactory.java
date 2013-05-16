@@ -28,7 +28,7 @@ public class MeteoServiceFactory
 	 */
 	public static MeteoService_I create(String portName)
 		{
-		//return null; // TODO
+		//return new MeteoService(portName);
 
 		// Provisoire
 		return new MeteoServiceSimulateur(portName);

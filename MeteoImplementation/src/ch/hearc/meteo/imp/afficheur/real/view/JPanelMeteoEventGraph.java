@@ -117,9 +117,11 @@ public class JPanelMeteoEventGraph extends JPanel
 				TimeSeries timeSeries = datas.get(i);
 				if (meteoEventList.size() > 0)
 					{
+					int indexFirstVale = (n <= meteoEventList.size()) ? n : meteoEventList.size();
+					upperRange = lowerRange = meteoEventList.get(indexFirstVale - 1).getValue();
+
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
 					timeSeries.addOrUpdate(new Millisecond(new Date(lastMeteoEvent.getTime())), lastMeteoEvent.getValue());
-					upperRange = lowerRange = meteoEventList.get(0).getValue();
 					computeRange(lastMeteoEvent.getValue());
 					}
 
