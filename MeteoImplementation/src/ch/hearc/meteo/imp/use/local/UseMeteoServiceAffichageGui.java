@@ -5,13 +5,13 @@ import java.rmi.RemoteException;
 
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
-import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
 import ch.hearc.meteo.spec.meteo.MeteoServiceFactory;
 import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.MeteoService_I;
 import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 import ch.hearc.meteo.spec.meteo.listener.MeteoAdapter;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
+import ch.hearc.meteo.spec.reseau.AfficheurServiceWrapper_I;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
@@ -39,7 +39,7 @@ public class UseMeteoServiceAffichageGui
 		MeteoServiceWrapper_I meteoServiceWrapperForRemoteAccess = new MeteoServiceWrapper(meteoService);
 
 		AffichageOptions affichageOptions = new AffichageOptions(3, titre);
-		final AfficheurService_I afficheurService = AfficheurFactory.create(affichageOptions, meteoServiceWrapperForRemoteAccess);
+		final AfficheurServiceWrapper_I afficheurService = (AfficheurServiceWrapper_I)AfficheurFactory.create(affichageOptions, meteoServiceWrapperForRemoteAccess);
 
 		meteoService.connect();
 
