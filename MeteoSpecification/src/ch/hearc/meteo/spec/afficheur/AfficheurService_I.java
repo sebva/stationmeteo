@@ -1,6 +1,7 @@
 
 package ch.hearc.meteo.spec.afficheur;
 
+import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
 public interface AfficheurService_I
@@ -12,4 +13,5 @@ public interface AfficheurService_I
 
 	public void printTemperature(MeteoEvent event);
 
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions);
 	}

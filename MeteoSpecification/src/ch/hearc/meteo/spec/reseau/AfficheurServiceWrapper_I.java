@@ -4,6 +4,7 @@ package ch.hearc.meteo.spec.reseau;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
 /**
@@ -21,4 +22,5 @@ public interface AfficheurServiceWrapper_I extends Remote
 
 	public void printTemperature(MeteoEvent event) throws RemoteException;
 
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions);
 	}

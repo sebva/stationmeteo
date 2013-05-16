@@ -5,6 +5,7 @@ import ch.hearc.meteo.imp.afficheur.simulateur.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.simulateur.vue.JFrameAfficheurService;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
+import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
@@ -49,6 +50,12 @@ public class AfficheurServiceSimulateur implements AfficheurService_I
 		{
 		afficheurServiceMOO.printPression(event);
 		jFrameAfficheurService.refresh();
+		}
+
+	@Override
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
+		{
+		afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
 		}
 
 	/*------------------------------------------------------------------*\

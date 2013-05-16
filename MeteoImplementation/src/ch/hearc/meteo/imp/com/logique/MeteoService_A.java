@@ -64,17 +64,20 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
 
-	@Override public void altitudePerformed(float value)
+	@Override
+	public void altitudePerformed(float value)
 		{
 		avertirAltitudeListener(meteoEvent(value, MeteoEventType_E.ALTITUDE));
 		}
 
-	@Override public void pressionPerformed(float value)
+	@Override
+	public void pressionPerformed(float value)
 		{
 		avertirPressionListener(meteoEvent(value, MeteoEventType_E.PRESSION));
 		}
 
-	@Override public void temperaturePerformed(float value)
+	@Override
+	public void temperaturePerformed(float value)
 		{
 		avertirTemperatureListener(meteoEvent(value, MeteoEventType_E.TEMPERATURE));
 		}
@@ -82,7 +85,8 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 	/**
 	 * Call before connect
 	 */
-	@Override synchronized public void start(MeteoServiceOptions meteoServiceOptions)
+	@Override
+	synchronized public void start(MeteoServiceOptions meteoServiceOptions)
 		{
 		if (isConnected)
 			{
@@ -90,7 +94,8 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 				{
 				System.out.println("MeteoService_A : Start");
 				isRunning = true;
-				run(meteoServiceOptions);
+				this.meteoServiceOptions = meteoServiceOptions;
+				run();
 				}
 			else
 				{
@@ -103,7 +108,8 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 			}
 		}
 
-	@Override public String toString()
+	@Override
+	public String toString()
 		{
 		StringBuilder builder = new StringBuilder();
 		builder.append("MeteoService_A (");
@@ -112,13 +118,15 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 		return builder.toString();
 		}
 
-	@Override synchronized public void stop()
+	@Override
+	synchronized public void stop()
 		{
 		System.out.println("MeteoService_A : Stop");
 		isRunning = false;
 		}
 
-	@Override synchronized public void connect() throws MeteoServiceException
+	@Override
+	synchronized public void connect() throws MeteoServiceException
 		{
 		if (!isConnected)
 			{
@@ -132,7 +140,8 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 			}
 		}
 
-	@Override synchronized public void disconnect() throws MeteoServiceException
+	@Override
+	synchronized public void disconnect() throws MeteoServiceException
 		{
 		if (isConnected)
 			{
@@ -144,12 +153,14 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 
 		}
 
-	@Override synchronized public boolean addMeteoListener(MeteoListener_I listener)
+	@Override
+	synchronized public boolean addMeteoListener(MeteoListener_I listener)
 		{
 		return listMeteoListener.add(listener);
 		}
 
-	@Override synchronized public boolean removeMeteoListener(MeteoListener_I listener)
+	@Override
+	synchronized public boolean removeMeteoListener(MeteoListener_I listener)
 		{
 		return listMeteoListener.remove(listener);
 		}
@@ -158,21 +169,40 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 	|*				Get				*|
 	\*------------------------------*/
 
-	@Override public String getPort()
+	@Override
+	public String getPort()
 		{
 		return namePort;
+		}
+
+	@Override
+	public MeteoServiceOptions getMeteoServiceOptions()
+		{
+		return meteoServiceOptions;
+		}
+
+	/*------------------------------*\
+	|*				Set				*|
+	\*------------------------------*/
+
+	@Override
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
+		{
+		this.meteoServiceOptions = meteoServiceOptions;
 		}
 
 	/*------------------------------*\
 	|*				Is				*|
 	\*------------------------------*/
 
-	@Override public synchronized boolean isRunning()
+	@Override
+	public synchronized boolean isRunning()
 		{
 		return isRunning;
 		}
 
-	@Override public synchronized boolean isConnect()
+	@Override
+	public synchronized boolean isConnect()
 		{
 		return isConnected;
 		}
@@ -187,12 +217,13 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 		return new MeteoEvent(source, meteoEventType, value, time);
 		}
 
-	private void run(final MeteoServiceOptions meteoServiceOptions)
+	private void run()
 		{
 		Thread thread = new Thread(new Runnable()
 			{
 
-				@Override public void run()
+				@Override
+				public void run()
 					{
 					long altitudeDT = meteoServiceOptions.getAltitudeDT();
 					long pressionDT = meteoServiceOptions.getPressionDT();
@@ -291,6 +322,7 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 
 	// Inputs
 	private String namePort;
+	private MeteoServiceOptions meteoServiceOptions;
 
 	// Tools
 	private List<MeteoListener_I> listMeteoListener;

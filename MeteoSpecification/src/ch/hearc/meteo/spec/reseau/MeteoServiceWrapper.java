@@ -42,6 +42,18 @@ public class MeteoServiceWrapper implements MeteoServiceWrapper_I
 		return meteoService.isConnect();
 		}
 
+	@Override
+	public MeteoServiceOptions getMeteoServiceOptions()
+		{
+		return meteoService.getMeteoServiceOptions();
+		}
+
+	@Override
+	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
+		{
+		meteoService.setMeteoServiceOptions(meteoServiceOptions);
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
@@ -52,4 +64,5 @@ public class MeteoServiceWrapper implements MeteoServiceWrapper_I
 
 	// Inputs
 	private MeteoService_I meteoService;
+
 	}
