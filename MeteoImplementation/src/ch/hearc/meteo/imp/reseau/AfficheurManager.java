@@ -7,6 +7,7 @@ import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
 import ch.hearc.meteo.spec.reseau.AfficheurManager_I;
+import ch.hearc.meteo.spec.reseau.AfficheurServiceWrapper;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
 import com.bilat.tools.reseau.rmi.IdTools;
@@ -57,8 +58,9 @@ public class AfficheurManager implements AfficheurManager_I
 			// server
 			{
 			AfficheurService_I afficheurService = createAfficheurService(affichageOptions, meteoServiceWrapperRemote);
+			AfficheurServiceWrapper afficheurServiceWrapper = new AfficheurServiceWrapper(afficheurService);
 			RmiURL afficheurServicermiURL = rmiUrl();
-			RmiTools.shareObject(afficheurService, afficheurServicermiURL);
+			RmiTools.shareObject(afficheurServiceWrapper, afficheurServicermiURL);
 
 			return afficheurServicermiURL; // Retourner le RMI-ID pour une connection distante sur le serveur d'affichage
 			}

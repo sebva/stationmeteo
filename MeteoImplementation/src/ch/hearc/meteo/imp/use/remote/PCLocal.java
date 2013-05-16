@@ -15,6 +15,7 @@ import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 import ch.hearc.meteo.spec.meteo.listener.MeteoListener_I;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 import ch.hearc.meteo.spec.reseau.AfficheurManager_I;
+import ch.hearc.meteo.spec.reseau.AfficheurServiceWrapper_I;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper;
 
 import com.bilat.tools.reseau.rmi.IdTools;
@@ -102,7 +103,7 @@ public class PCLocal implements PC_I
 			//Remote
 			AfficheurManager_I afficheurManagerRemote = (AfficheurManager_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
 			RmiURL rmiUrlAfficheurManagerRemote = afficheurManagerRemote.createRemoteAfficheurService(affichageOptions, RMI_URL);
-			final AfficheurService_I afficheurServiceRemote = (AfficheurService_I)RmiTools.connectionRemoteObjectBloquant(rmiUrlAfficheurManagerRemote);
+			final AfficheurServiceWrapper_I afficheurServiceRemote = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiUrlAfficheurManagerRemote);
 
 			meteoService.connect();
 
