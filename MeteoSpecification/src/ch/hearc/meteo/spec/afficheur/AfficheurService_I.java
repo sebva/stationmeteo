@@ -1,18 +1,15 @@
 
 package ch.hearc.meteo.spec.afficheur;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
-public interface AfficheurService_I extends Remote
+public interface AfficheurService_I
 	{
 
-	public void printPression(MeteoEvent event) throws RemoteException;
+	public void printPression(MeteoEvent event);
 
-	public void printAltitude(MeteoEvent event) throws RemoteException;
+	public void printAltitude(MeteoEvent event);
 
-	public void printTemperature(MeteoEvent event) throws RemoteException;
+	public void printTemperature(MeteoEvent event);
 
 	}

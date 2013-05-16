@@ -8,9 +8,10 @@ import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 
 /**
  * <pre>
- * Service restreint utilisable à distance sur le serveur d'affichage.
  * L'objectif est de ne pas poluer l'implementation du serviceMeteo avec la moindre trace de RMI.
- * En effet, le serviceMeteo n'est pas forcement utilisable en reseau, et son implementation doit etre independante de cette problematique
+ * En effet, le serviceMeteo n'est pas forcement utilisable en reseau, et son implementation doit etre independante de cette problematique.
+ *
+ * Service restreint utilisable à distance sur le serveur d'affichage.
  * </pre>
  */
 public interface MeteoServiceWrapper_I extends Remote

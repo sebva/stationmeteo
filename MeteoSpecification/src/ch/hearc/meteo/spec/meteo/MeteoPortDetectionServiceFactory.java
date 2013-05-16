@@ -1,9 +1,8 @@
 
 package ch.hearc.meteo.spec.meteo;
 
-import ch.hearc.meteo.imp.com.simulateur.MeteoServiceSimulateur;
 
-public class MeteoServiceFactory
+public class MeteoPortDetectionServiceFactory
 	{
 
 	/*------------------------------------------------------------------*\
@@ -18,20 +17,12 @@ public class MeteoServiceFactory
 	|*			  Static			*|
 	\*------------------------------*/
 
-	/**
-	 * <pre>
-	 * Example:
-	 * 		Windows : namePort=COM1
-	 * 		Linux	: ??
-	 * 		Mac 	: ??
-	 * </pre>
-	 */
-	public static MeteoService_I create(String portName)
+	public static MeteoPortDetectionService_I create()
 		{
-		//return null; // TODO
+		// TODO
 
 		// Provisoire
-		return new MeteoServiceSimulateur(portName);
+		return null;
 		}
 
 	/*------------------------------------------------------------------*\

@@ -27,4 +27,5 @@ public interface MeteoService_I
 	public boolean addMeteoListener(MeteoListener_I listener);
 
 	public boolean removeMeteoListener(MeteoListener_I listener);
+
 	}
