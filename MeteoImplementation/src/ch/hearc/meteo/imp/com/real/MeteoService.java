@@ -16,16 +16,16 @@ import ch.hearc.meteo.spec.meteo.exception.MeteoServiceException;
 public class MeteoService extends MeteoService_A
 	{
 
+	/*------------------------------------------------------------------*\
+	|*							Constructeurs							*|
+	\*------------------------------------------------------------------*/
+
 	public MeteoService(String portName)
 		{
 		super(portName);
 
 		this.comConnexion = new ComConnexion(this, portName, new ComOption());
 		}
-
-	/*------------------------------------------------------------------*\
-	|*							Constructeurs							*|
-	\*------------------------------------------------------------------*/
 
 	/*------------------------------------------------------------------*\
 	|*							Methodes Public							*|
