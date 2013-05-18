@@ -30,16 +30,6 @@ public class UsePCLocal
 
 	public static void main()
 		{
-		/*try
-			{
-			saveProperties();
-			}
-		catch (IOException e)
-			{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-		*/
 		try
 			{
 			FileInputStream fis = new FileInputStream(FILE_PROPERTIES);
@@ -48,27 +38,29 @@ public class UsePCLocal
 			propertie.load(bis);
 
 			String stringIP = propertie.getProperty(ADRESSE_IP);
-
 			InetAddress ip = InetAddress.getByName(stringIP);
 			int rmi_port = Integer.valueOf(propertie.getProperty(RMI_PORT));
-			String com_port = propertie.getProperty(COM_PORT);
-			if (com_port == "null")
+			String portCom = propertie.getProperty(COM_PORT);
+
+			if (portCom == "null")
 				{
-				com_port = null;
+				portCom = null;
 				}
 
 			String name = propertie.getProperty(LOCATION_NAME);
 			String latitude = propertie.getProperty(LATITUDE);
 			String longitude = propertie.getProperty(LONGITUDE);
+
 			bis.close();
 			fis.close();
 
 			RmiURL rmiUrl = new RmiURL(AfficheurManager.RMI_ID, ip, rmi_port);
 
-			String portCom = new String(com_port);
+
 			int rand = (int)(Math.random() * 100);
-			MeteoServiceOptions meteoServiceOptions = new MeteoServiceOptions(100 + rand, 200 + rand, 300 + rand, 400 + rand);
-			AffichageOptions affichageOptions = new AffichageOptions(30, name + ";" + latitude + ";" + longitude);
+			int n = 10;
+			MeteoServiceOptions meteoServiceOptions = new MeteoServiceOptions(n + rand, 2*n + rand, 3*n + rand, 4*n + rand);
+			AffichageOptions affichageOptions = new AffichageOptions(n, name + ";" + latitude + ";" + longitude);
 
 			new PCLocal(meteoServiceOptions, portCom, affichageOptions, rmiUrl).run();
 			}
@@ -112,7 +104,7 @@ public class UsePCLocal
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final String STORE_NAME = "Ni66A - Station Météo - Options";
+	private static final String STORE_NAME = "Station Météo - Config";
 	private static final String ADRESSE_IP = "ADRESSE_IP";
 	private static final String RMI_PORT = "RMI_PORT";
 	private static final String COM_PORT = "COM_PORT";

@@ -17,7 +17,10 @@ public class UsePCCentral
 
 	public static void main()
 		{
-		AffichageOptions affichageOptions = new AffichageOptions(10, "Serveur");
+		String titre = "Serveur";
+		int n = 10;
+
+		AffichageOptions affichageOptions = new AffichageOptions(n, titre);
 		new PCCentral(affichageOptions).run();
 		}
 

@@ -42,27 +42,24 @@ public class AfficheurManager implements AfficheurManager_I
 	@Override
 	public RmiURL createRemoteAfficheurService(AffichageOptions affichageOptions, RmiURL meteoServiceRmiURL) throws RemoteException
 		{
-		MeteoServiceWrapper_I meteoServiceWrapperRemote = null;
-			// client
+		try
 			{
-			try
-				{
-				meteoServiceWrapperRemote = (MeteoServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(meteoServiceRmiURL);
-				}
-			catch (Exception e)
-				{
-				e.printStackTrace();
-				}
-			}
+			// client
+			MeteoServiceWrapper_I meteoServiceWrapperRemote = null;
+			meteoServiceWrapperRemote = (MeteoServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(meteoServiceRmiURL);
 
 			// server
-			{
 			AfficheurService_I afficheurService = createAfficheurService(affichageOptions, meteoServiceWrapperRemote);
 			AfficheurServiceWrapper afficheurServiceWrapper = new AfficheurServiceWrapper(afficheurService);
 			RmiURL afficheurServicermiURL = rmiUrl();
 			RmiTools.shareObject(afficheurServiceWrapper, afficheurServicermiURL);
 
 			return afficheurServicermiURL; // Retourner le RMI-ID pour une connection distante sur le serveur d'affichage
+			}
+		catch (Exception e)
+			{
+			e.printStackTrace();
+			return null;
 			}
 		}
 
@@ -91,7 +88,7 @@ public class AfficheurManager implements AfficheurManager_I
 
 	private void server() throws RemoteException
 		{
-		RmiTools.shareObject(this,new RmiURL(PREFIXE));
+		RmiTools.shareObject(this, new RmiURL(PREFIXE));
 		}
 
 	/*------------------------------*\

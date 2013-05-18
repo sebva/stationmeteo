@@ -45,6 +45,8 @@ public class PCLocal implements PC_I
 		portComs = new ArrayList<String>();
 		rmiURLs = new ArrayList<RmiURL>();
 
+		//TODO Put portCom GUI to use all portComs the user wants
+
 		portComs.add(portCom);
 		}
 
@@ -67,7 +69,7 @@ public class PCLocal implements PC_I
 
 		try
 			{
-			client(); // aprüs
+			client(); // après
 			}
 		catch (RemoteException e)
 			{
@@ -133,8 +135,6 @@ public class PCLocal implements PC_I
 
 			for(MeteoService_I meteoService:meteoServices)
 				{
-				meteoService.connect();
-
 				meteoService.addMeteoListener(new MeteoListener_I()
 					{
 
@@ -199,6 +199,7 @@ public class PCLocal implements PC_I
 							}
 					});
 
+				meteoService.connect();
 				meteoService.start(meteoServiceOptions);
 				}
 			}
@@ -234,5 +235,4 @@ public class PCLocal implements PC_I
 	private AfficheurService_I afficheurService;
 	private boolean lostConnection;
 	private final static String PREFIX = "WRAPPER";
-	private final static RmiURL RMI_URL = new RmiURL(IdTools.createID(PREFIX));
 	}
