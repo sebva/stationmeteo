@@ -3,12 +3,15 @@ package ch.hearc.meteo.imp.afficheur.real.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+
+import ch.hearc.meteo.imp.afficheur.real.ImageTools;
 
 public class JFrameAfficheurService extends JFrame
 	{
@@ -101,6 +104,7 @@ public class JFrameAfficheurService extends JFrame
 		getContentPane().setBackground(BACKGROUND_COLOR);
 		setBackground(BACKGROUND_COLOR);
 		setTitle("Station météo");
+		setIconImage(ICON);
 		setSize(1100, 700);
 		setMinimumSize(new Dimension(1100, 700));
 		setVisible(true);
@@ -124,4 +128,6 @@ public class JFrameAfficheurService extends JFrame
 	public static final Color PLOT_BACKGROUND_COLOR = new Color(55, 55, 55);
 
 	public static final int POOLING_DELAY = 1000;
+	private static final String ICON_PATH = "res/images/app_icon.png";
+	private static final Image ICON = ImageTools.load(ICON_PATH, true);
 	}
