@@ -2,14 +2,11 @@
 package ch.hearc.meteo.imp.afficheur.real.view;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
+import java.awt.Dimension;
 
-import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
-import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
 public class JPanelTemperature extends JPanel
 	{
@@ -36,9 +33,8 @@ public class JPanelTemperature extends JPanel
 	public void refresh()
 		{
 		jPanelGraphTemperature.refresh();
-		MeteoEvent meteoEvent = afficheurServiceMOO.getLastTemperature();
-		jLabelTemperature.setText(String.format("%.2f", meteoEvent.getValue()) + "°C");
 		}
+
 	/*------------------------------*\
 	|*				Set				*|
 	\*------------------------------*/
@@ -46,6 +42,12 @@ public class JPanelTemperature extends JPanel
 	/*------------------------------*\
 	|*				Get				*|
 	\*------------------------------*/
+
+	@Override
+	public Dimension getMaximumSize()
+		{
+		return new Dimension(1000, 300);
+		}
 
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
@@ -60,18 +62,9 @@ public class JPanelTemperature extends JPanel
 		{
 		setLayout(new BorderLayout());
 
-		Box boxH = Box.createHorizontalBox();
+		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, X_LABEL, Y_LABEL, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, false, afficheurServiceMOO);
 
-		jLabelTemperature = new JLabel();
-		Font font = new Font(jLabelTemperature.getFont().getName(), Font.PLAIN, 24);
-		jLabelTemperature.setFont(font);
-		jLabelTemperature.setForeground(JFrameAfficheurService.FOREGROUND_COLOR);
-		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, X_LABEL, Y_LABEL, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, false, afficheurServiceMOO);
-
-		add(boxH, BorderLayout.CENTER);
-
-		boxH.add(jLabelTemperature);
-		boxH.add(jPanelGraphTemperature);
+		add(jPanelGraphTemperature, BorderLayout.CENTER);
 		}
 
 	private void apparence()
@@ -84,7 +77,6 @@ public class JPanelTemperature extends JPanel
 	\*------------------------------------------------------------------*/
 
 	//Inputs
-	private JLabel jLabelTemperature;
 	private JPanelMeteoEventGraph jPanelGraphTemperature;
 	private AfficheurServiceMOO afficheurServiceMOO;
 

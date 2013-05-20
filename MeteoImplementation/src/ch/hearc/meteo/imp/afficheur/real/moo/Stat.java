@@ -1,6 +1,9 @@
 
 package ch.hearc.meteo.imp.afficheur.real.moo;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Stat
 	{
 
@@ -22,6 +25,7 @@ public class Stat
 		// Tools
 		this.sum = 0;
 		this.compteur = 0;
+		this.movingAverageDatas = new LinkedList<Float>();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -30,6 +34,13 @@ public class Stat
 
 	public void update(float currentValue)
 		{
+		movingAverageDatas.add(currentValue);
+		movingAverageTotal += currentValue;
+		if (movingAverageDatas.size() > 50)
+			{
+			movingAverageTotal -= movingAverageDatas.poll();
+			}
+
 		compteur++;
 		last = currentValue;
 		sum += currentValue;
@@ -39,11 +50,8 @@ public class Stat
 			min = Math.min(min, currentValue);
 			max = Math.max(max, currentValue);
 			moy = sum / compteur;
-			if (Math.abs(moy - last) <= 0.5f)
-				{
-				trend = Trend.equal;
-				}
-			else if (last > moy)
+
+			if (getMovingAverage() < last)
 				{
 				trend = Trend.up;
 				}
@@ -57,7 +65,6 @@ public class Stat
 			min = currentValue;
 			max = currentValue;
 			}
-
 		}
 
 	/*------------------------------*\
@@ -89,9 +96,10 @@ public class Stat
 		return trend;
 		}
 
-	/*------------------------------------------------------------------*\
-	|*							Methodes Private						*|
-	\*------------------------------------------------------------------*/
+	public float getMovingAverage()
+		{
+		return movingAverageTotal / movingAverageDatas.size();
+		}
 
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
@@ -109,4 +117,6 @@ public class Stat
 	// Tools
 	private long compteur;
 	private float sum;
+	private Queue<Float> movingAverageDatas;
+	private float movingAverageTotal;
 	}

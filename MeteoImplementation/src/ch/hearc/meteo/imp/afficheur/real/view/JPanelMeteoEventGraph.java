@@ -36,7 +36,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, int n, Color plotColor, Color backgroundColor, boolean showLegend, AfficheurServiceMOO afficheurServiceMOO)//, Stat stat)
+	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, int n, Color plotColor, Color backgroundColor, Color plotBackground, boolean showLegend, AfficheurServiceMOO afficheurServiceMOO)
 		{
 		this.title = title;
 		this.xLabel = xLabel;
@@ -44,10 +44,11 @@ public class JPanelMeteoEventGraph extends JPanel
 		this.n = n;
 		this.plotColor = plotColor;
 		this.backgroundColor = backgroundColor;
+		this.plotBackground = plotBackground;
 		this.showLegend = showLegend;
 		this.afficheurServiceMOO = afficheurServiceMOO;
-		lowerRange = 0.0;
-		upperRange = 0.0;
+		lowerRange = null;
+		upperRange = null;
 
 		this.datas = new ArrayList<TimeSeries>();
 		this.meteoEvents = new ArrayList<List<MeteoEvent>>();
@@ -109,9 +110,13 @@ public class JPanelMeteoEventGraph extends JPanel
 		{
 		ListIterator<List<MeteoEvent>> meteoEventsListIterator = meteoEvents.listIterator();
 		int i = 0;
+		upperRange = lowerRange = null;
 		while(meteoEventsListIterator.hasNext())
 			{
 			List<MeteoEvent> meteoEventList = meteoEventsListIterator.next();
+
+			//System.out.println(meteoEventList.size()); //TODO
+
 			synchronized (meteoEventList)
 				{
 				TimeSeries timeSeries = datas.get(i);
@@ -126,7 +131,7 @@ public class JPanelMeteoEventGraph extends JPanel
 				int j = 0;
 				while(iterator.hasPrevious() && j < n)
 					{
-					MeteoEvent meteoEvent = iterator.previous(); //TODO: ConcurrentModificationException ???
+					MeteoEvent meteoEvent = iterator.previous();
 					timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
 					computeRangeByNewValue(meteoEvent.getValue());
 					j++;
@@ -213,7 +218,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		XYPlot plot = (XYPlot)chart.getPlot();
 
 		chart.setBackgroundPaint(backgroundColor);
-		plot.setBackgroundPaint(backgroundColor);
+		plot.setBackgroundPaint(plotBackground);
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setRangeGridlinePaint(Color.BLACK);
 		plot.setRangeCrosshairLockedOnData(true);
@@ -241,6 +246,10 @@ public class JPanelMeteoEventGraph extends JPanel
 
 	private void computeRangeByNewValue(float value)
 		{
+		if (upperRange == null || lowerRange == null)
+			{
+			upperRange = lowerRange = value;
+			}
 		if (upperRange < value)
 			{
 			upperRange = value;
@@ -251,20 +260,9 @@ public class JPanelMeteoEventGraph extends JPanel
 			}
 		}
 
-	private void computeRangeByRemoveValue(float valueRemoved, float value)
-		{
-		if (upperRange == valueRemoved)
-			{
-			upperRange = value;
-			}
-		else if (lowerRange == valueRemoved)
-			{
-			lowerRange = value;
-			}
-		}
-
 	private void setRange()
 		{
+		if (upperRange == null || lowerRange == null) { return; }
 		double max = (Math.abs(lowerRange) > Math.abs(upperRange)) ? Math.abs(lowerRange) : Math.abs(upperRange);
 		double offset = max * (OFFSET_RANGE_PERCENT / 100);
 		if (offset < OFFSET_RANGE_MIN)
@@ -285,6 +283,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	private int n;
 	private Color plotColor;
 	private Color backgroundColor;
+	private Color plotBackground;
 	private List<List<MeteoEvent>> meteoEvents;
 	private boolean showLegend;
 	private AfficheurServiceMOO afficheurServiceMOO;
@@ -295,8 +294,8 @@ public class JPanelMeteoEventGraph extends JPanel
 	private JSlider jSliderN;
 	private List<TimeSeries> datas;
 	private TimeSeriesCollection dataSet;
-	private double lowerRange;
-	private double upperRange;
+	private Float lowerRange;
+	private Float upperRange;
 	private ValueAxis rangeAxis;
 
 	/*------------------------------*\

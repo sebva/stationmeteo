@@ -16,7 +16,7 @@ public class FonctionPression extends Fonctions_A
 
 	@Override public double f(double t)
 		{
-		return 50 + 2 * Math.cos(t);
+		return 910 + 45 * 2 * Math.cos(t);
 		}
 
 	/*------------------------------------------------------------------*\
