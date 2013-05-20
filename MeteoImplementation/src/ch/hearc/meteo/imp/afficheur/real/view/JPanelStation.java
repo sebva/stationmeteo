@@ -38,28 +38,49 @@ public class JPanelStation extends JPanel
 		{
 		jPanelTemperature.refresh();
 		jPanelPressure.refresh();
-		Date lastUpdateDate = new Date(afficheurServiceMOO.getLastTemperature().getTime());
-		jLabelLastUpdate.setText("Dernière mise à jour : " + DATE_FORMAT.format(lastUpdateDate));
+
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(afficheurServiceMOO.getTitre());
 		if (afficheurServiceMOO.getLastAltitude() != null)
 			{
 			stringBuilder.append(" situé à ");
-			stringBuilder.append(afficheurServiceMOO.getLastAltitude().getValue());
+			stringBuilder.append((int)afficheurServiceMOO.getLastAltitude().getValue());
 			stringBuilder.append("m d'altitude");
 			}
 		jLabelName.setText(stringBuilder.toString());
+
+		stringBuilder = new StringBuilder();
+		if (afficheurServiceMOO.getLastTemperature() != null)
+			{
+			stringBuilder.append("Température actuelle : ");
+			stringBuilder.append(String.format("%.2f", afficheurServiceMOO.getLastTemperature().getValue()));
+			stringBuilder.append("°C");
+			}
+		jLabelTemperature.setText(stringBuilder.toString());
+
+		stringBuilder = new StringBuilder();
+		if (afficheurServiceMOO.getLastPression() != null)
+			{
+			stringBuilder.append("Pression actuelle : ");
+			stringBuilder.append(String.format("%.2f", afficheurServiceMOO.getLastPression().getValue()));
+			stringBuilder.append("hPa");
+			}
+		jLabelPressure.setText(stringBuilder.toString());
+
+		Date lastUpdateDate = new Date(afficheurServiceMOO.getLastTemperature().getTime());
+		jLabelLastUpdate.setText("Dernière mise à jour : " + DATE_FORMAT.format(lastUpdateDate));
 		}
 
 	/*------------------------------*\
 	|*			  Static			*|
 	\*------------------------------*/
 
-	public static void setJLabelStyle(JLabel jLabel, int fontSize)
+	public static void setupJLabelStyle(JLabel jLabel, int fontSize)
 		{
 		Font font = new Font(jLabel.getFont().getName(), Font.PLAIN, fontSize);
 		jLabel.setFont(font);
 		jLabel.setForeground(JFrameAfficheurService.FOREGROUND_COLOR);
+		jLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		}
 
 	/*------------------------------*\
@@ -90,21 +111,47 @@ public class JPanelStation extends JPanel
 	private void geometry()
 		{
 		setLayout(new BorderLayout());
-		Box boxV = Box.createVerticalBox();
-
-		add(boxV, BorderLayout.CENTER);
+		Box mainBox = Box.createHorizontalBox();
+		Box infosBox = Box.createVerticalBox();
+		Box datasBox = Box.createVerticalBox();
 
 		jPanelTemperature = new JPanelTemperature(afficheurServiceMOO);
 		jPanelPressure = new JPanelPressure(afficheurServiceMOO);
+		jPanelSwitzerland = new JPanelSwitzerland(afficheurServiceMOO);
+		jPanelDelta = new JPanelDelta(afficheurServiceMOO);
 		jLabelLastUpdate = new JLabel();
 		jLabelName = new JLabel();
+		jLabelTemperature = new JLabel();
+		jLabelPressure = new JLabel();
 
-		add(boxV, BorderLayout.CENTER);
+		add(mainBox, BorderLayout.CENTER);
+		mainBox.add(infosBox);
+		mainBox.add(Box.createHorizontalGlue());
+		mainBox.add(datasBox);
 
-		boxV.add(jLabelName);
-		boxV.add(jLabelLastUpdate);
-		boxV.add(jPanelTemperature);
-		boxV.add(jPanelPressure);
+		Box infosTextParent = Box.createHorizontalBox();
+		Box infosText = Box.createVerticalBox();
+		infosText.add(jLabelName);
+		infosText.add(jLabelTemperature);
+		infosText.add(jLabelPressure);
+		infosText.add(jLabelLastUpdate);
+		infosTextParent.add(Box.createHorizontalGlue());
+		infosTextParent.add(infosText);
+		infosTextParent.add(Box.createHorizontalGlue());
+		infosBox.add(infosTextParent);
+
+		Box deltaParent = Box.createHorizontalBox();
+		deltaParent.add(Box.createHorizontalGlue());
+		deltaParent.add(jPanelDelta);
+		deltaParent.add(Box.createHorizontalGlue());
+		infosBox.add(Box.createVerticalStrut(50));
+		infosBox.add(deltaParent);
+		infosBox.add(Box.createVerticalStrut(50));
+		infosBox.add(jPanelSwitzerland);
+
+		datasBox.add(jPanelTemperature);
+		datasBox.add(jPanelPressure);
+
 		}
 
 	private void control()
@@ -114,8 +161,10 @@ public class JPanelStation extends JPanel
 
 	private void apparence()
 		{
-		setJLabelStyle(jLabelLastUpdate, 16);
-		setJLabelStyle(jLabelName, 20);
+		setupJLabelStyle(jLabelLastUpdate, 16);
+		setupJLabelStyle(jLabelName, 20);
+		setupJLabelStyle(jLabelTemperature, 20);
+		setupJLabelStyle(jLabelPressure, 20);
 		setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
 		}
 
@@ -131,8 +180,12 @@ public class JPanelStation extends JPanel
 	// Outputs
 	private JLabel jLabelLastUpdate;
 	private JLabel jLabelName;
+	private JLabel jLabelTemperature;
+	private JLabel jLabelPressure;
 	private JPanelTemperature jPanelTemperature;
 	private JPanelPressure jPanelPressure;
+	private JPanelSwitzerland jPanelSwitzerland;
+	private JPanelDelta jPanelDelta;
 
 	/*------------------------------*\
 	|*			  Static			*|

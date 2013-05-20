@@ -17,9 +17,6 @@ public class JFrameAfficheurService extends JFrame
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	/**
-	 * Si meteoServiceRemote est null, alors on est le serveur et on affiche des tabs
-	 */
 	public JFrameAfficheurService()
 		{
 		jPanelStations = new LinkedList<JPanelStation>();
@@ -61,7 +58,6 @@ public class JFrameAfficheurService extends JFrame
 		jPanelStations.add(jPanelStation);
 		tabbedPane.addTab(jPanelStation.getAfficheurServiceMOO().getTitre(), jPanelStation);
 		jPanelSummary.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
-		jPanelSwitzerland.addAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 		}
 
 	public synchronized void verifyStation()
@@ -72,7 +68,6 @@ public class JFrameAfficheurService extends JFrame
 			if (!jPanelStation.isConnected())
 				{
 				jPanelSummary.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
-				jPanelSwitzerland.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 				tabbedPane.remove(jPanelStation);
 				panelStationsToRemove.add(jPanelStation);
 				}
@@ -92,9 +87,7 @@ public class JFrameAfficheurService extends JFrame
 		tabbedPane = new JTabbedPane();
 		add(tabbedPane);
 		jPanelSummary = new JPanelSummary();
-		jPanelSwitzerland = new JPanelSwitzerland();
 		tabbedPane.add("Summary", jPanelSummary);
-		tabbedPane.add("Maps", jPanelSwitzerland);
 		}
 
 	private void control()
@@ -108,8 +101,8 @@ public class JFrameAfficheurService extends JFrame
 		getContentPane().setBackground(BACKGROUND_COLOR);
 		setBackground(BACKGROUND_COLOR);
 		setTitle("Station météo");
-		setSize(750, 850);
-		setMinimumSize(new Dimension(750, 850));
+		setSize(1100, 700);
+		setMinimumSize(new Dimension(1100, 700));
 		setVisible(true);
 		}
 
@@ -121,12 +114,14 @@ public class JFrameAfficheurService extends JFrame
 	private List<JPanelStation> jPanelStations;
 	private JTabbedPane tabbedPane;
 	private JPanelSummary jPanelSummary;
-	private JPanelSwitzerland jPanelSwitzerland;
+
 	/*------------------------------*\
 	|*			  Static			*|
 	\*------------------------------*/
 
-	public static final Color BACKGROUND_COLOR = new Color(41, 128, 185);
+	public static final Color BACKGROUND_COLOR = new Color(35, 35, 35);//41, 128, 185);
 	public static final Color FOREGROUND_COLOR = new Color(241, 196, 15);
+	public static final Color PLOT_BACKGROUND_COLOR = new Color(55, 55, 55);
+
 	public static final int POOLING_DELAY = 1000;
 	}

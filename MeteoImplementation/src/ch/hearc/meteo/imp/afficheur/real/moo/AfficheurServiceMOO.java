@@ -1,6 +1,7 @@
 
 package ch.hearc.meteo.imp.afficheur.real.moo;
 
+import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class AfficheurServiceMOO
 		this.n = n;
 		String[] infos = titre.split(";");
 		int nbInfos = infos.length;
-		if(nbInfos >= 3)
+		if (nbInfos >= 3)
 			{
 			this.longitude = Double.valueOf(infos[nbInfos - 2]);
 			this.latitude = Double.valueOf(infos[nbInfos - 1]);
@@ -107,6 +108,42 @@ public class AfficheurServiceMOO
 		this.n = n;
 		}
 
+	public void setAltitudeDT(long dt)
+		{
+		try
+			{
+			meteoServiceRemote.getMeteoServiceOptions().setAltitudeDT(dt);
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
+		}
+
+	public void setTemperatureDT(long dt)
+		{
+		try
+			{
+			meteoServiceRemote.getMeteoServiceOptions().setTemperatureDT(dt);
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
+		}
+
+	public void setPressureDT(long dt)
+		{
+		try
+			{
+			meteoServiceRemote.getMeteoServiceOptions().setPressionDT(dt);
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
+		}
+
 	/*------------------------------*\
 	|*				Get				*|
 	\*------------------------------*/
@@ -182,6 +219,45 @@ public class AfficheurServiceMOO
 	public double getLatitude()
 		{
 		return this.latitude;
+		}
+
+	public long getAltitudeDT() throws RemoteException
+		{
+		try
+			{
+			return meteoServiceRemote.getMeteoServiceOptions().getAltitudeDT();
+
+			}
+		catch (Exception e)
+			{
+			return 500;
+			}
+		}
+
+	public long getTemperatureDT() throws RemoteException
+		{
+		try
+			{
+			return meteoServiceRemote.getMeteoServiceOptions().getTemperatureDT();
+
+			}
+		catch (Exception e)
+			{
+			return 500;
+			}
+		}
+
+	public long getPressureDT() throws RemoteException
+		{
+		try
+			{
+			return meteoServiceRemote.getMeteoServiceOptions().getPressionDT();
+
+			}
+		catch (Exception e)
+			{
+			return 500;
+			}
 		}
 
 	/*------------------------------------------------------------------*\
