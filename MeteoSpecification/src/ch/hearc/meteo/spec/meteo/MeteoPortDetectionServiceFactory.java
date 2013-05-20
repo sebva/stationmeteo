@@ -1,7 +1,7 @@
 
 package ch.hearc.meteo.spec.meteo;
 
-import ch.hearc.meteo.imp.com.real.MeteoPortDetectionService;
+import ch.hearc.meteo.imp.com.simulateur.MeteoPortDetectionServiceSimulateur;
 
 
 public class MeteoPortDetectionServiceFactory
@@ -21,7 +21,10 @@ public class MeteoPortDetectionServiceFactory
 
 	public static MeteoPortDetectionService_I create()
 		{
-		return new MeteoPortDetectionService();
+		//return new MeteoPortDetectionService();
+
+		// Provisoire
+		return new MeteoPortDetectionServiceSimulateur();
 		}
 
 	/*------------------------------------------------------------------*\

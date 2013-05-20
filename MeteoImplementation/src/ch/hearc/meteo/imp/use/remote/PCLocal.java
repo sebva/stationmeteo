@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import ch.hearc.meteo.imp.afficheur.real.view.JDialogComPortChooser;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
@@ -32,7 +33,7 @@ public class PCLocal implements PC_I
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public PCLocal(MeteoServiceOptions meteoServiceOptions, String portCom, AffichageOptions affichageOptions, RmiURL rmiURLafficheurManager)
+	public PCLocal(MeteoServiceOptions meteoServiceOptions, AffichageOptions affichageOptions, RmiURL rmiURLafficheurManager)
 		{
 		this.meteoServiceOptions = meteoServiceOptions;
 		this.affichageOptions = affichageOptions;
@@ -42,12 +43,13 @@ public class PCLocal implements PC_I
 		meteoServiceWrappers = new ArrayList<MeteoServiceWrapper_I>();
 		afficheurServiceWrappers = new ArrayList<AfficheurServiceWrapper_I>();
 		meteoServices = new ArrayList<MeteoService_I>();
-		portComs = new ArrayList<String>();
 		rmiURLs = new ArrayList<RmiURL>();
 
-		//TODO Put portCom GUI to use all portComs the user wants
+		JDialogComPortChooser portChooser = new JDialogComPortChooser();
+		// Bloquant
+		portChooser.setVisible(true);
 
-		portComs.add(portCom);
+		portComs = portChooser.getSelectedPorts();
 		}
 
 	/*------------------------------------------------------------------*\
