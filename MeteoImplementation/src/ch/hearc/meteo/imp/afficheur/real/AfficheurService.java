@@ -36,7 +36,7 @@ public class AfficheurService implements AfficheurService_I
 				{
 				e.printStackTrace();
 				}
-			jFrameAfficheurService = new JFrameAfficheurService();
+			jFrameAfficheurService = new JFrameAfficheurService(meteoServiceRemote == null);
 			}
 
 		if (meteoServiceRemote != null)

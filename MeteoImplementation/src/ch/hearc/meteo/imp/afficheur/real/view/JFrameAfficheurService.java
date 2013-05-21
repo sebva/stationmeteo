@@ -4,7 +4,7 @@ package ch.hearc.meteo.imp.afficheur.real.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,36 +20,39 @@ public class JFrameAfficheurService extends JFrame
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JFrameAfficheurService()
+	public JFrameAfficheurService(boolean isCentral)
 		{
 		jPanelStations = new LinkedList<JPanelStation>();
+		this.isCentral = isCentral;
 
 		geometry();
 		control();
 		apparence();
-
-		Thread thread = new Thread(new Runnable()
+		if (isCentral)
 			{
+			Thread thread = new Thread(new Runnable()
+				{
 
-				@Override
-				public void run()
-					{
-					while(true)
+					@Override
+					public void run()
 						{
-						try
+						while(true)
 							{
-							verifyStation();
-							Thread.sleep(POOLING_DELAY);
-							}
-						catch (Exception e)
-							{
-							e.printStackTrace();
+							try
+								{
+								verifyStation();
+								Thread.sleep(POOLING_DELAY);
+								}
+							catch (Exception e)
+								{
+								e.printStackTrace();
+								}
 							}
 						}
-					}
-			});
+				});
 
-		thread.start();
+			thread.start();
+			}
 		}
 
 	/*------------------------------------------------------------------*\
@@ -65,6 +68,19 @@ public class JFrameAfficheurService extends JFrame
 
 	public synchronized void verifyStation()
 		{
+		Iterator<JPanelStation> iterator = jPanelStations.iterator();
+		while(iterator.hasNext())
+			{
+			JPanelStation jPanelStation = iterator.next();
+			if (!jPanelStation.isConnected())
+				{
+				jPanelSummary.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
+				tabbedPane.remove(jPanelStation);
+				jPanelStations.remove(jPanelStation);
+				}
+			}
+
+		/*
 		List<JPanelStation> panelStationsToRemove = new ArrayList<JPanelStation>();
 		for(JPanelStation jPanelStation:jPanelStations)
 			{
@@ -78,7 +94,7 @@ public class JFrameAfficheurService extends JFrame
 		for(JPanelStation jPanelStation:panelStationsToRemove)
 			{
 			jPanelStations.remove(jPanelStation);
-			}
+			}*/
 		}
 
 	/*------------------------------------------------------------------*\
@@ -118,6 +134,7 @@ public class JFrameAfficheurService extends JFrame
 	private List<JPanelStation> jPanelStations;
 	private JTabbedPane tabbedPane;
 	private JPanelSummary jPanelSummary;
+	private boolean isCentral;
 
 	/*------------------------------*\
 	|*			  Static			*|
