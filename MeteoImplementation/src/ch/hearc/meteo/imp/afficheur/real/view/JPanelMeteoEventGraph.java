@@ -131,9 +131,16 @@ public class JPanelMeteoEventGraph extends JPanel
 				int j = 0;
 				while(iterator.hasPrevious() && j < n)
 					{
-					MeteoEvent meteoEvent = iterator.previous();
-					timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
-					computeRangeByNewValue(meteoEvent.getValue());
+					try
+						{
+						MeteoEvent meteoEvent = iterator.previous();
+						timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
+						computeRangeByNewValue(meteoEvent.getValue());
+						}
+					catch(Exception e)
+						{
+						// Rien
+						}
 					j++;
 					}
 				}
