@@ -85,25 +85,9 @@ public class JFrameAfficheurService extends JFrame
 				{
 				jPanelSummary.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
 				tabbedPane.remove(jPanelStation);
-				jPanelStations.remove(jPanelStation);
+				iterator.remove();
 				}
 			}
-
-		/*
-		List<JPanelStation> panelStationsToRemove = new ArrayList<JPanelStation>();
-		for(JPanelStation jPanelStation:jPanelStations)
-			{
-			if (!jPanelStation.isConnected())
-				{
-				jPanelSummary.removeAfficheurServiceMOO(jPanelStation.getAfficheurServiceMOO());
-				tabbedPane.remove(jPanelStation);
-				panelStationsToRemove.add(jPanelStation);
-				}
-			}
-		for(JPanelStation jPanelStation:panelStationsToRemove)
-			{
-			jPanelStations.remove(jPanelStation);
-			}*/
 		}
 
 	/*------------------------------------------------------------------*\
