@@ -20,7 +20,7 @@ public class JFrameAfficheurService extends JFrame
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JFrameAfficheurService(boolean isCentral)
+	private JFrameAfficheurService(boolean isCentral)
 		{
 		jPanelStations = new LinkedList<JPanelStation>();
 		this.isCentral = isCentral;
@@ -58,6 +58,15 @@ public class JFrameAfficheurService extends JFrame
 	/*------------------------------------------------------------------*\
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
+
+	public synchronized static JFrameAfficheurService getInstance(boolean isCentral)
+		{
+		if (instance == null)
+			{
+			instance = new JFrameAfficheurService(isCentral);
+			}
+		return instance;
+		}
 
 	public synchronized void addNewStation(JPanelStation jPanelStation)
 		{
@@ -119,7 +128,7 @@ public class JFrameAfficheurService extends JFrame
 		setBackground(BACKGROUND_COLOR);
 		getContentPane().setBackground(BACKGROUND_COLOR);
 		setBackground(BACKGROUND_COLOR);
-		setTitle("Station météo");
+		setTitle("Station météo" + ((isCentral) ? " - Central" : ""));
 		setIconImage(ICON);
 		setSize(1100, 700);
 		setMinimumSize(new Dimension(1100, 700));
@@ -139,6 +148,8 @@ public class JFrameAfficheurService extends JFrame
 	/*------------------------------*\
 	|*			  Static			*|
 	\*------------------------------*/
+
+	private static JFrameAfficheurService instance;
 
 	public static final Color BACKGROUND_COLOR = new Color(35, 35, 35);//41, 128, 185);
 	public static final Color FOREGROUND_COLOR = new Color(241, 196, 15);

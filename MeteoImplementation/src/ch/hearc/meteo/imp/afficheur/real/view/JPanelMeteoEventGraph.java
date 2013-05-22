@@ -137,7 +137,7 @@ public class JPanelMeteoEventGraph extends JPanel
 						timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
 						computeRangeByNewValue(meteoEvent.getValue());
 						}
-					catch(Exception e)
+					catch (Exception e)
 						{
 						// Rien
 						}
