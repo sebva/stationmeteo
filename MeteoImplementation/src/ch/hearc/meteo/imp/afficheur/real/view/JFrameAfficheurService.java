@@ -156,6 +156,6 @@ public class JFrameAfficheurService extends JFrame
 	public static final Color PLOT_BACKGROUND_COLOR = new Color(55, 55, 55);
 
 	public static final int POOLING_DELAY = 1000;
-	private static final String ICON_PATH = "res/images/app_icon.png";
-	private static final Image ICON = ImageTools.load(ICON_PATH, true);
+	private static final String ICON_PATH = "images/app_icon.png";
+	private static final Image ICON = ImageTools.loadJar(ICON_PATH, true);
 	}

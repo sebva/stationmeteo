@@ -130,7 +130,6 @@ public Dimension getMaximumSize()
 	private static final double MAX_LONGITUDE = 10.992201;
 	private static final double MIN_LATITUDE = 45.817913;
 	private static final double MAX_LATITUDE = 47.798485;
-	private static final String SWITZERLAND_PATH = "res/images/switzerland.png";
-	//private static final Image SWITZERLAND = ImageTools.loadJar(SWITZERLAND_PATH, true);
-	private static final Image SWITZERLAND = ImageTools.load(SWITZERLAND_PATH, true); //TODO
+	private static final String SWITZERLAND_PATH = "images/switzerland.png";
+	private static final Image SWITZERLAND = ImageTools.loadJar(SWITZERLAND_PATH, true);
 	}
