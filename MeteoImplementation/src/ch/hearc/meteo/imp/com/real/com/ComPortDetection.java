@@ -91,7 +91,7 @@ public class ComPortDetection
 							}
 						catch (InterruptedException | BrokenBarrierException e)
 							{
-							e.printStackTrace();
+							// Rien
 							}
 						}
 				};
