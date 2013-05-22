@@ -150,8 +150,8 @@ public class JDialogComPortChooser extends JDialog
 
 					super.getListCellRendererComponent(list, realValue.getKey(), index, isSelected, cellHasFocus);
 
-					String path = realValue.getValue() ? "res/images/meteo.png" : "res/images/no-meteo.png";
-					ImageIcon icon = ImageTools.loadIcon(path, true);
+					String path = realValue.getValue() ? "images/meteo.png" : "images/no-meteo.png";
+					ImageIcon icon = ImageTools.loadIconJar(path, true);
 					setIcon(icon);
 					return this;
 					}
