@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Détection 32/64 bits
 if [ `uname -m | grep 64 | wc -l` ]; then
 	bits=64
