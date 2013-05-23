@@ -3,8 +3,6 @@ package ch.hearc.meteo.imp.afficheur.real;
 
 import java.rmi.RemoteException;
 
-import javax.swing.UIManager;
-
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.view.JFrameAfficheurService;
 import ch.hearc.meteo.imp.afficheur.real.view.JPanelStation;
@@ -26,18 +24,8 @@ public class AfficheurService implements AfficheurService_I
 	 */
 	public AfficheurService(String titre, int n, MeteoServiceWrapper_I meteoServiceRemote)
 		{
-		if (jFrameAfficheurService == null)
-			{
-			try
-				{
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				}
-			catch (Exception e)
-				{
-				e.printStackTrace();
-				}
-			jFrameAfficheurService = JFrameAfficheurService.getInstance(meteoServiceRemote == null);
-			}
+
+		jFrameAfficheurService = JFrameAfficheurService.getInstance(meteoServiceRemote == null);
 
 		if (meteoServiceRemote != null)
 			{

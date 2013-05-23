@@ -137,7 +137,7 @@ public class JFrameAfficheurService extends JFrame
 
 	public static final Color BACKGROUND_COLOR = new Color(35, 35, 35);//41, 128, 185);
 	public static final Color FOREGROUND_COLOR = new Color(241, 196, 15);
-	public static final Color PLOT_BACKGROUND_COLOR = new Color(55, 55, 55);
+	public static final Color PLOT_BACKGROUND_COLOR = new Color(75, 75, 75);
 
 	public static final int POOLING_DELAY = 1000;
 	private static final String ICON_PATH = "images/app_icon.png";

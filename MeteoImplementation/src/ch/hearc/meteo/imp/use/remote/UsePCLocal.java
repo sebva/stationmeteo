@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Properties;
 
+import javax.swing.UIManager;
+
 import ch.hearc.meteo.imp.reseau.AfficheurManager;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
@@ -32,6 +34,8 @@ public class UsePCLocal
 		{
 		try
 			{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
 			FileInputStream fis = new FileInputStream(FILE_PROPERTIES);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			Properties propertie = new Properties();

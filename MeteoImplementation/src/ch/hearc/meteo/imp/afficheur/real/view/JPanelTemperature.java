@@ -17,8 +17,6 @@ public class JPanelTemperature extends JPanel
 
 	public JPanelTemperature(AfficheurServiceMOO afficheurServiceMOO)
 		{
-		this.afficheurServiceMOO = afficheurServiceMOO;
-
 		geometry();
 		control();
 		apparence();
@@ -62,7 +60,7 @@ public class JPanelTemperature extends JPanel
 		{
 		setLayout(new BorderLayout());
 
-		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, X_LABEL, Y_LABEL, 30, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, false, afficheurServiceMOO);
+		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, X_LABEL, Y_LABEL, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, false);
 
 		add(jPanelGraphTemperature, BorderLayout.CENTER);
 		}
@@ -78,7 +76,6 @@ public class JPanelTemperature extends JPanel
 
 	//Inputs
 	private JPanelMeteoEventGraph jPanelGraphTemperature;
-	private AfficheurServiceMOO afficheurServiceMOO;
 
 	/*------------------------------*\
 	|*			  Static			*|
