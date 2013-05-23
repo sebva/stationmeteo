@@ -96,11 +96,6 @@ public class JPanelMeteoEventGraph extends JPanel
 				{
 				TimeSeries timeSeries = dataSet.getSeries(i);
 
-				System.out.println(meteoEventList.size());
-				System.out.println(timeSeries.getMaximumItemCount());
-				System.out.println(datas.size());
-				System.out.println(dataSet.getSeriesCount());
-
 				if (meteoEventList.size() > 0)
 					{
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
@@ -124,7 +119,6 @@ public class JPanelMeteoEventGraph extends JPanel
 						}
 					j++;
 					}
-				System.err.println(j);
 				}
 			i++;
 			}
