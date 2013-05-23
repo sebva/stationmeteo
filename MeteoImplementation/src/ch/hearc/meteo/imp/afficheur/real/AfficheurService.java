@@ -90,6 +90,12 @@ public class AfficheurService implements AfficheurService_I
 			}
 		}
 
+	@Override
+	public MeteoServiceOptions getMeteoServiceOptions() throws RemoteException
+		{
+		return afficheurServiceMOO.getMeteoServiceRemote().getMeteoServiceOptions();
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
