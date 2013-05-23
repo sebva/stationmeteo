@@ -51,6 +51,8 @@ public class JPanelMeteoEventGraph extends JPanel
 		this.showLegend = showLegend;
 		lowerRange = null;
 		upperRange = null;
+		lowerDomain = null;
+		upperDomain = null;
 
 		this.datas = new ArrayList<TimeSeries>();
 		this.meteoEvents = new ArrayList<List<MeteoEvent>>();
@@ -88,6 +90,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		ListIterator<List<MeteoEvent>> meteoEventsListIterator = meteoEvents.listIterator();
 		int i = 0;
 		upperRange = lowerRange = null;
+		upperDomain = lowerDomain = null;
 		while(meteoEventsListIterator.hasNext())
 			{
 			List<MeteoEvent> meteoEventList = meteoEventsListIterator.next();
@@ -101,6 +104,7 @@ public class JPanelMeteoEventGraph extends JPanel
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
 					timeSeries.addOrUpdate(new Millisecond(new Date(lastMeteoEvent.getTime())), lastMeteoEvent.getValue());
 					computeRangeByNewValue(lastMeteoEvent.getValue());
+					computeDomainByNewValue(lastMeteoEvent.getTime());
 					}
 
 				ListIterator<MeteoEvent> iterator = meteoEventList.listIterator(meteoEventList.size());
@@ -112,6 +116,7 @@ public class JPanelMeteoEventGraph extends JPanel
 						MeteoEvent meteoEvent = iterator.previous();
 						timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
 						computeRangeByNewValue(meteoEvent.getValue());
+						computeDomainByNewValue(meteoEvent.getTime());
 						}
 					catch (Exception e)
 						{
@@ -124,6 +129,7 @@ public class JPanelMeteoEventGraph extends JPanel
 			}
 		checkN();
 		setRange();
+		setDomain();
 		}
 
 	/*------------------------------*\
@@ -220,14 +226,14 @@ public class JPanelMeteoEventGraph extends JPanel
 
 		plot.setDomainCrosshairVisible(true);
 
-		DateAxis axis = (DateAxis)plot.getDomainAxis();
-		axis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
+		domainAxis = (DateAxis)plot.getDomainAxis();
+		domainAxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
 		plot.getRenderer().setSeriesPaint(0, plotColor);
 		plot.getRenderer().setBaseStroke(new BasicStroke(2));
 		((AbstractRenderer)plot.getRenderer()).setAutoPopulateSeriesStroke(false);
 		rangeAxis = plot.getRangeAxis();
-
 		setRange();
+		setDomain();
 
 		return chart;
 		}
@@ -255,6 +261,29 @@ public class JPanelMeteoEventGraph extends JPanel
 		jSliderN.createStandardLabels(spacing);
 		}
 
+	private void computeDomainByNewValue(long value)
+		{
+		if (upperDomain == null || lowerDomain == null)
+			{
+			upperDomain = lowerDomain = value;
+			}
+		if (upperDomain < value)
+			{
+			upperDomain = value;
+			}
+		else if (lowerDomain > value)
+			{
+			lowerDomain = value;
+			}
+		}
+
+	private void setDomain()
+		{
+		if (upperDomain == null || lowerDomain == null) { return; }
+		domainAxis.setMinimumDate(new Date(lowerDomain));
+		domainAxis.setMaximumDate(new Date(upperDomain));
+		}
+
 	private void computeRangeByNewValue(float value)
 		{
 		if (upperRange == null || lowerRange == null)
@@ -274,6 +303,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	private void setRange()
 		{
 		if (upperRange == null || lowerRange == null) { return; }
+
 		double max = (Math.abs(lowerRange) > Math.abs(upperRange)) ? Math.abs(lowerRange) : Math.abs(upperRange);
 		double offset = max * (OFFSET_RANGE_PERCENT / 100);
 		if (offset < OFFSET_RANGE_MIN)
@@ -306,7 +336,10 @@ public class JPanelMeteoEventGraph extends JPanel
 	private TimeSeriesCollection dataSet;
 	private Float lowerRange;
 	private Float upperRange;
+	private Long lowerDomain;
+	private Long upperDomain;
 	private ValueAxis rangeAxis;
+	private DateAxis domainAxis;
 	private XYPlot plot;
 
 	/*------------------------------*\
