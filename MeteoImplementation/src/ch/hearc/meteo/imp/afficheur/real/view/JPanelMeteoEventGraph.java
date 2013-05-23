@@ -4,6 +4,10 @@ package ch.hearc.meteo.imp.afficheur.real.view;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +30,6 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
 public class JPanelMeteoEventGraph extends JPanel
@@ -36,17 +39,16 @@ public class JPanelMeteoEventGraph extends JPanel
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, int n, Color plotColor, Color backgroundColor, Color plotBackground, boolean showLegend, AfficheurServiceMOO afficheurServiceMOO)
+	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, Color plotColor, Color backgroundColor, Color plotBackground, boolean showLegend)
 		{
 		this.title = title;
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
-		this.n = n;
+		this.n = JSLIDER_VALUE_MIN;
 		this.plotColor = plotColor;
 		this.backgroundColor = backgroundColor;
 		this.plotBackground = plotBackground;
 		this.showLegend = showLegend;
-		this.afficheurServiceMOO = afficheurServiceMOO;
 		lowerRange = null;
 		upperRange = null;
 
@@ -57,31 +59,6 @@ public class JPanelMeteoEventGraph extends JPanel
 		geometry();
 		control();
 		apparence();
-		if (afficheurServiceMOO != null)
-			{
-			Thread thread = new Thread(new Runnable()
-				{
-
-					@Override
-					public void run()
-						{
-						while(true)
-							{
-							try
-								{
-								Thread.sleep(JFrameAfficheurService.POOLING_DELAY);
-								checkN();
-								}
-							catch (Exception e)
-								{
-								e.printStackTrace();
-								}
-							}
-						}
-				});
-
-			thread.start();
-			}
 		}
 
 	/*------------------------------------------------------------------*\
@@ -115,11 +92,15 @@ public class JPanelMeteoEventGraph extends JPanel
 			{
 			List<MeteoEvent> meteoEventList = meteoEventsListIterator.next();
 
-			//System.out.println(meteoEventList.size()); //TODO
-
 			synchronized (meteoEventList)
 				{
-				TimeSeries timeSeries = datas.get(i);
+				TimeSeries timeSeries = dataSet.getSeries(i);
+
+				System.out.println(meteoEventList.size());
+				System.out.println(timeSeries.getMaximumItemCount());
+				System.out.println(datas.size());
+				System.out.println(dataSet.getSeriesCount());
+
 				if (meteoEventList.size() > 0)
 					{
 					MeteoEvent lastMeteoEvent = meteoEventList.get(meteoEventList.size() - 1);
@@ -137,15 +118,17 @@ public class JPanelMeteoEventGraph extends JPanel
 						timeSeries.addOrUpdate(new Millisecond(new Date(meteoEvent.getTime())), meteoEvent.getValue());
 						computeRangeByNewValue(meteoEvent.getValue());
 						}
-					catch(Exception e)
+					catch (Exception e)
 						{
 						// Rien
 						}
 					j++;
 					}
+				System.err.println(j);
 				}
 			i++;
 			}
+		checkN();
 		setRange();
 		}
 
@@ -165,10 +148,6 @@ public class JPanelMeteoEventGraph extends JPanel
 			{
 			refresh();
 			}
-		if (afficheurServiceMOO != null)
-			{
-			afficheurServiceMOO.setN(n);
-			}
 		}
 
 	/*------------------------------*\
@@ -182,12 +161,25 @@ public class JPanelMeteoEventGraph extends JPanel
 	private void geometry()
 		{
 		setLayout(new BorderLayout());
-		JFreeChart chart = createChart(dataSet);
-		ChartPanel chartPanel = new ChartPanel(chart);
+		final JFreeChart chart = createChart(dataSet);
+		ChartPanel chartPanel = new ChartPanel(chart)
+			{
+
+				@Override
+				public void paintComponent(Graphics g)
+					{
+					super.paintComponent(g);
+					Dimension size = this.getSize();
+					int w = (int)Math.rint(size.width);
+					int h = (int)Math.rint(size.height);
+					chart.draw((Graphics2D)g, new Rectangle2D.Double(0, 0, w, h));
+					}
+			};
+
 		chartPanel.setDomainZoomable(false);
 		chartPanel.setRangeZoomable(false);
-		jSliderN = new JSlider(JSLIDER_MIN, JSLIDER_MAX, n);
-		jSliderN.setMajorTickSpacing(JSLIDER_STEP);
+
+		jSliderN = new JSlider(JSLIDER_VALUE_MIN, JSLIDER_VALUE_MIN, JSLIDER_VALUE_MIN);
 		jSliderN.setPaintTicks(true);
 		jSliderN.setPaintLabels(true);
 		jSliderN.addChangeListener(new ChangeListener()
@@ -199,7 +191,9 @@ public class JPanelMeteoEventGraph extends JPanel
 					setN(jSliderN.getValue());
 					}
 			});
+
 		jSliderN.setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
+		jSliderN.setForeground(JFrameAfficheurService.FOREGROUND_COLOR);
 
 		Box boxV = Box.createVerticalBox();
 		boxV.add(chartPanel);
@@ -215,20 +209,22 @@ public class JPanelMeteoEventGraph extends JPanel
 
 	private void apparence()
 		{
-		//Rien
+		setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
 		}
 
 	private JFreeChart createChart(TimeSeriesCollection dataset)
 		{
 		JFreeChart chart = org.jfree.chart.ChartFactory.createTimeSeriesChart(title, xLabel, yLabel, dataset, showLegend, false, false);
 
-		XYPlot plot = (XYPlot)chart.getPlot();
+		plot = (XYPlot)chart.getPlot();
 
 		chart.setBackgroundPaint(backgroundColor);
+		chart.getTitle().setPaint(plotColor);
 		plot.setBackgroundPaint(plotBackground);
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setRangeGridlinePaint(Color.BLACK);
-		plot.setRangeCrosshairLockedOnData(true);
+
+		plot.setDomainCrosshairVisible(true);
 
 		DateAxis axis = (DateAxis)plot.getDomainAxis();
 		axis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
@@ -236,6 +232,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		plot.getRenderer().setBaseStroke(new BasicStroke(2));
 		((AbstractRenderer)plot.getRenderer()).setAutoPopulateSeriesStroke(false);
 		rangeAxis = plot.getRangeAxis();
+
 		setRange();
 
 		return chart;
@@ -243,12 +240,25 @@ public class JPanelMeteoEventGraph extends JPanel
 
 	private void checkN()
 		{
-		if (afficheurServiceMOO.getN() != n)
+		ListIterator<List<MeteoEvent>> meteoEventsListIterator = meteoEvents.listIterator();
+		int max = 0;
+		while(meteoEventsListIterator.hasNext())
 			{
-			System.out.println("n changed");
-			jSliderN.setValue(n);
-			setN(n);
+			List<MeteoEvent> meteoEventList = meteoEventsListIterator.next();
+			int n = meteoEventList.size();
+			if (max < n)
+				{
+				max = n;
+				}
 			}
+		if (max < JSLIDER_VALUE_MIN)
+			{
+			max = JSLIDER_VALUE_MIN;
+			}
+		jSliderN.setMaximum(max);
+		int spacing = (((max - JSLIDER_VALUE_MIN) / 10) < 10) ? 10 : ((max - JSLIDER_VALUE_MIN) / 10);
+		jSliderN.setMajorTickSpacing(spacing);
+		jSliderN.createStandardLabels(spacing);
 		}
 
 	private void computeRangeByNewValue(float value)
@@ -293,7 +303,6 @@ public class JPanelMeteoEventGraph extends JPanel
 	private Color plotBackground;
 	private List<List<MeteoEvent>> meteoEvents;
 	private boolean showLegend;
-	private AfficheurServiceMOO afficheurServiceMOO;
 
 	//Outputs
 
@@ -304,14 +313,13 @@ public class JPanelMeteoEventGraph extends JPanel
 	private Float lowerRange;
 	private Float upperRange;
 	private ValueAxis rangeAxis;
+	private XYPlot plot;
 
 	/*------------------------------*\
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final int JSLIDER_MIN = 10;
-	private static final int JSLIDER_MAX = 1000;
-	private static final int JSLIDER_STEP = 100;
+	private static final int JSLIDER_VALUE_MIN = 10;
 	private static final double OFFSET_RANGE_MIN = 1.0;
 	private static final double OFFSET_RANGE_PERCENT = 5.0;
 

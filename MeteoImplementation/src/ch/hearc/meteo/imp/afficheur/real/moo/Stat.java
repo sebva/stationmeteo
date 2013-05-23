@@ -25,6 +25,7 @@ public class Stat
 		// Tools
 		this.sum = 0;
 		this.compteur = 0;
+		this.movingAverageTotal = 0;
 		this.movingAverageDatas = new LinkedList<Float>();
 		}
 

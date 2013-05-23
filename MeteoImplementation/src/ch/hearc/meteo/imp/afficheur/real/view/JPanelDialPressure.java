@@ -142,6 +142,7 @@ public class JPanelDialPressure extends JPanel
 
 		JFreeChart jfreechart = new JFreeChart(dialplot);
 		jfreechart.setTitle(TITLE);
+		jfreechart.getTitle().setPaint(JFrameAfficheurService.FOREGROUND_COLOR);
 		jfreechart.setBackgroundPaint(JFrameAfficheurService.BACKGROUND_COLOR);
 
 		ChartPanel chartpanel = new ChartPanel(jfreechart, false);

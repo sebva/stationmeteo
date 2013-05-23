@@ -224,8 +224,8 @@ public class JPanelDelta extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final int JSLIDER_MIN = 0;
-	private static final int JSLIDER_MAX = 2000;
+	private static final int JSLIDER_MIN = 500;
+	private static final int JSLIDER_MAX = 3000;
 	private static final int JSLIDER_STEP = 500;
 
 	}

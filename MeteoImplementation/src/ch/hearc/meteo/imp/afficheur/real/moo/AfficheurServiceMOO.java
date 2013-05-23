@@ -17,6 +17,7 @@ public class AfficheurServiceMOO
 
 	/**
 	 * n = #data to print
+	 * @param n
 	 */
 	public AfficheurServiceMOO(String titre, int n, MeteoServiceWrapper_I meteoServiceRemote)
 		{
@@ -103,11 +104,6 @@ public class AfficheurServiceMOO
 		isPause = etat;
 		}
 
-	public void setN(int n)
-		{
-		this.n = n;
-		}
-
 	public void setAltitudeDT(long dt)
 		{
 		try
@@ -151,6 +147,11 @@ public class AfficheurServiceMOO
 	public String getTitre()
 		{
 		return this.titre;
+		}
+
+	public int getN()
+		{
+		return this.n;
 		}
 
 	public MeteoServiceWrapper_I getMeteoServiceRemote()
@@ -204,11 +205,6 @@ public class AfficheurServiceMOO
 	public Stat getStatTemperature()
 		{
 		return this.statTemperature;
-		}
-
-	public int getN()
-		{
-		return this.n;
 		}
 
 	public double getLongitude()
@@ -289,8 +285,8 @@ public class AfficheurServiceMOO
 	\*------------------------------------------------------------------*/
 
 	// Inputs
-	private int n;
 	private String titre;
+	private int n;
 	private double longitude;
 	private double latitude;
 	private MeteoServiceWrapper_I meteoServiceRemote;
