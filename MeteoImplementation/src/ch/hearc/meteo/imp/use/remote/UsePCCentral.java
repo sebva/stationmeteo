@@ -31,8 +31,9 @@ public class UsePCCentral
 
 		String titre = "Serveur";
 		int n = 10;
-
+		System.setProperty("sun.rmi.activation.execTimeout", "1000");
 		AffichageOptions affichageOptions = new AffichageOptions(n, titre);
+
 		new PCCentral(affichageOptions).run();
 		}
 

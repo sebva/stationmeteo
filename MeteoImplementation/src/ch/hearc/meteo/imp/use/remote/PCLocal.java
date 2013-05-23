@@ -215,7 +215,8 @@ public class PCLocal implements PC_I
 		{
 		lostConnection = true;
 		System.err.println("Connexion perdue. Veuillez relancer une instance !");
-		JOptionPane.showMessageDialog(null, "Connexion perdue. Vérifier l'état du serveur puis relancez le programme !", "Connexion perdue", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Connexion perdue. Vérifier l'état du serveur puis relancez le programme ! Appuyer sur OK pour quitter.", "Connexion perdue", JOptionPane.ERROR_MESSAGE);
+		System.exit(-1);
 		}
 
 	/*------------------------------------------------------------------*\
