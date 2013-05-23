@@ -1,6 +1,8 @@
 
 package ch.hearc.meteo.spec.afficheur;
 
+import java.rmi.RemoteException;
+
 import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
@@ -13,5 +15,6 @@ public interface AfficheurService_I
 
 	public void printTemperature(MeteoEvent event);
 
-	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions);
+	public MeteoServiceOptions getMeteoServiceOptions() throws RemoteException;
+
 	}

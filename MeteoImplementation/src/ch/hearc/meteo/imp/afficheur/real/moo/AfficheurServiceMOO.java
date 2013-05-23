@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 import ch.hearc.meteo.spec.reseau.MeteoServiceWrapper_I;
 
@@ -108,7 +109,9 @@ public class AfficheurServiceMOO
 		{
 		try
 			{
-			meteoServiceRemote.getMeteoServiceOptions().setAltitudeDT(dt);
+			MeteoServiceOptions meteoServiceOptions = meteoServiceRemote.getMeteoServiceOptions();
+			meteoServiceOptions.setAltitudeDT(dt);
+			meteoServiceRemote.setMeteoServiceOptions(meteoServiceOptions);
 			}
 		catch (RemoteException e)
 			{
@@ -120,7 +123,9 @@ public class AfficheurServiceMOO
 		{
 		try
 			{
-			meteoServiceRemote.getMeteoServiceOptions().setTemperatureDT(dt);
+			MeteoServiceOptions meteoServiceOptions = meteoServiceRemote.getMeteoServiceOptions();
+			meteoServiceOptions.setTemperatureDT(dt);
+			meteoServiceRemote.setMeteoServiceOptions(meteoServiceOptions);
 			}
 		catch (RemoteException e)
 			{
@@ -132,7 +137,9 @@ public class AfficheurServiceMOO
 		{
 		try
 			{
-			meteoServiceRemote.getMeteoServiceOptions().setPressionDT(dt);
+			MeteoServiceOptions meteoServiceOptions = meteoServiceRemote.getMeteoServiceOptions();
+			meteoServiceOptions.setPressionDT(dt);
+			meteoServiceRemote.setMeteoServiceOptions(meteoServiceOptions);
 			}
 		catch (RemoteException e)
 			{

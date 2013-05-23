@@ -66,19 +66,6 @@ public class AfficheurService implements AfficheurService_I
 		}
 
 	@Override
-	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
-		{
-		try
-			{
-			afficheurServiceMOO.getMeteoServiceRemote().setMeteoServiceOptions(meteoServiceOptions);
-			}
-		catch (RemoteException e)
-			{
-			e.printStackTrace();
-			}
-		}
-
-	@Override
 	public MeteoServiceOptions getMeteoServiceOptions() throws RemoteException
 		{
 		return afficheurServiceMOO.getMeteoServiceRemote().getMeteoServiceOptions();

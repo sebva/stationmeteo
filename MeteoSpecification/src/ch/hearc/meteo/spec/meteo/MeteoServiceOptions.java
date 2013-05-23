@@ -29,20 +29,6 @@ public class MeteoServiceOptions implements Serializable
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
 
-	@Override public String toString()
-		{
-		StringBuilder builder = new StringBuilder();
-		builder.append("MeteoServiceOptions [altitudeDT=");
-		builder.append(this.altitudeDT);
-		builder.append(", pressionDT=");
-		builder.append(this.pressionDT);
-		builder.append(", temperatureDT=");
-		builder.append(this.temperatureDT);
-		builder.append(", delayMS=");
-		builder.append(this.delayMS);
-		builder.append("]");
-		return builder.toString();
-		}
 
 	/*------------------------------*\
 	|*				Set				*|

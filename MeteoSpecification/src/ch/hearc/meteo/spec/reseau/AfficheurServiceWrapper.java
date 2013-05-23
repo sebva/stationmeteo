@@ -4,7 +4,6 @@ package ch.hearc.meteo.spec.reseau;
 import java.rmi.RemoteException;
 
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
-import ch.hearc.meteo.spec.meteo.MeteoServiceOptions;
 import ch.hearc.meteo.spec.meteo.listener.event.MeteoEvent;
 
 public class AfficheurServiceWrapper implements AfficheurServiceWrapper_I
@@ -47,10 +46,4 @@ public class AfficheurServiceWrapper implements AfficheurServiceWrapper_I
 	\*------------------------------------------------------------------*/
 
 	private AfficheurService_I afficheurService;
-
-	@Override
-	public void setMeteoServiceOptions(MeteoServiceOptions meteoServiceOptions)
-		{
-		afficheurService.setMeteoServiceOptions(meteoServiceOptions);
-		}
 	}
