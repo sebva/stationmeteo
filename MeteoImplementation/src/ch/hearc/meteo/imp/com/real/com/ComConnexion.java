@@ -70,7 +70,25 @@ public class ComConnexion implements ComConnexions_I
 
 					try
 						{
-						String trame = reader.readLine();
+						// On n'utilise pas readLine(), car elle n'attend pas toujours le \n qui suit le \r
+						StringBuilder builder = new StringBuilder();
+						int caractere = reader.read();
+						boolean lastWasCR = false;
+						
+						while(caractere != -1)
+							{
+							if(lastWasCR && caractere == '\n')
+								{
+								break;
+								}
+							lastWasCR = caractere == '\r';
+							
+							builder.append((char)caractere);
+							caractere = reader.read();
+							}
+						
+						// On ne prend pas le \r
+						String trame = builder.substring(0, builder.length() -1);
 						float valeur = TrameDecoder.valeur(trame);
 
 						switch(TrameDecoder.dataType(trame))
