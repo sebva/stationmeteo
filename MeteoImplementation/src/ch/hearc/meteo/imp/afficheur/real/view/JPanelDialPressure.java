@@ -48,8 +48,28 @@ public class JPanelDialPressure extends JPanel
 
 	public void refresh()
 		{
-		currentSeaLevelPressure.setValue(pressure.getSeaLevelPressure());
-		currentPressure.setValue(pressure.getPressure());
+		double seaLevelPressureValue = pressure.getSeaLevelPressure();
+		if (seaLevelPressureValue < MIN_PRESSURE_SEA)
+			{
+			seaLevelPressureValue = MIN_PRESSURE_SEA;
+			}
+		else if (seaLevelPressureValue > MAX_PRESSURE_SEA)
+			{
+			seaLevelPressureValue = MAX_PRESSURE_SEA;
+			}
+
+		double pressureValue = pressure.getPressure();
+		if (pressureValue < MIN_PRESSURE)
+			{
+			pressureValue = MIN_PRESSURE;
+			}
+		else if (pressureValue > MAX_PRESSURE)
+			{
+			pressureValue = MAX_PRESSURE;
+			}
+
+		currentSeaLevelPressure.setValue(seaLevelPressureValue);
+		currentPressure.setValue(pressureValue);
 		}
 
 	/*------------------------------------------------------------------*\
@@ -167,7 +187,7 @@ public class JPanelDialPressure extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	public static final String TITLE = "Pression atmosphérique";
+	public static final String TITLE = "Pression atmosphï¿½rique";
 	public static final String UNITY = "hPa";
 	private static final Double MIN_PRESSURE_SEA = 970.0;
 	private static final Double MAX_PRESSURE_SEA = 1060.0;

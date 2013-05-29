@@ -58,12 +58,12 @@ public class JPanelPressure extends JPanel
 
 		if (afficheurServiceMOO.getStatPression().getTrend() == Trend.up)
 			{
-			stringBuilder.append(" /\\");
+			stringBuilder.append(" \u25B2");
 			jLabelTrend.setForeground(TREND_UP_COLOR);
 			}
 		else if (afficheurServiceMOO.getStatPression().getTrend() == Trend.down)
 			{
-			stringBuilder.append(" \\/");
+			stringBuilder.append(" \u25BC");
 			jLabelTrend.setForeground(TREND_DOWN_COLOR);
 			}
 
