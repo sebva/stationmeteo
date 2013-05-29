@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import ch.hearc.meteo.imp.afficheur.real.view.JDialogComPortChooser;
 import ch.hearc.meteo.spec.afficheur.AffichageOptions;
 import ch.hearc.meteo.spec.afficheur.AfficheurFactory;
 import ch.hearc.meteo.spec.afficheur.AfficheurService_I;
@@ -44,12 +43,8 @@ public class PCLocal implements PC_I
 		afficheurServiceWrappers = new ArrayList<AfficheurServiceWrapper_I>();
 		meteoServices = new ArrayList<MeteoService_I>();
 		rmiURLs = new ArrayList<RmiURL>();
-
-		JDialogComPortChooser portChooser = new JDialogComPortChooser();
-		// Bloquant
-		portChooser.setVisible(true);
-
-		portComs = portChooser.getSelectedPorts();
+		portComs = new ArrayList<>();
+		portComs.add("COM4");
 		}
 
 	/*------------------------------------------------------------------*\
