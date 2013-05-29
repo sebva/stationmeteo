@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -252,9 +253,48 @@ public class JPanelMeteoEventGraph extends JPanel
 			max = JSLIDER_VALUE_MIN;
 			}
 		jSliderN.setMaximum(max);
-		int spacing = (((max - JSLIDER_VALUE_MIN) / 10) < 10) ? 10 : ((max - JSLIDER_VALUE_MIN) / 10);
+		setMajorTickSpacing(jSliderN, max);
+		/*int spacing = (((max - JSLIDER_VALUE_MIN) / 10) < 10) ? 10 : ((max - JSLIDER_VALUE_MIN) / 10);
 		jSliderN.setMajorTickSpacing(spacing);
-		jSliderN.createStandardLabels(spacing);
+		jSliderN.createStandardLabels(spacing);*/
+		}
+
+	/**
+	 * https://forums.oracle.com/forums/thread.jspa?threadID=1353301
+	 */
+	private void setMajorTickSpacing(JSlider slider, int maxValue)
+		{
+		Graphics graphics = slider.getGraphics();
+		FontMetrics fontMetrics = graphics.getFontMetrics();
+		int width = slider.getWidth();
+		// try with the following values:
+		// 1,2,5,10,20,50,100,200,500,...
+		int tickSpacing = 1;
+		for(int i = 0, tmpWidthSum = width + 1; tmpWidthSum > (width / 2); i++)
+			{
+			tickSpacing = (int)Math.pow(10, (i / 3));
+			switch(i % 3)
+				{
+				case 1:
+					tickSpacing *= 2;
+					break;
+				case 2:
+					tickSpacing *= 5;
+				}
+			tmpWidthSum = 0;
+			for(int j = 0; j < maxValue; j += tickSpacing)
+				{
+				Rectangle2D stringBounds = fontMetrics.getStringBounds(String.valueOf(j), graphics);
+				tmpWidthSum += (int)stringBounds.getWidth();
+				if (tmpWidthSum > (width / 2))
+					{
+					// the labels are longer than the slider
+					break;
+					}
+				}
+			}
+		slider.setMajorTickSpacing(tickSpacing);
+		slider.setLabelTable(slider.createStandardLabels(tickSpacing));
 		}
 
 	private void computeDomainByNewValue(long value)
