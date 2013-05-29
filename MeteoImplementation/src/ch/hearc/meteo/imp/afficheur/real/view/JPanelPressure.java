@@ -12,8 +12,6 @@ import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.moo.Pressure;
 import ch.hearc.meteo.imp.afficheur.real.moo.Trend;
 
-
-
 public class JPanelPressure extends JPanel
 	{
 
@@ -107,7 +105,6 @@ public class JPanelPressure extends JPanel
 		add(jPanelDialPressure);
 		}
 
-
 	private void apparence()
 		{
 		setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
@@ -134,7 +131,7 @@ public class JPanelPressure extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final Color TREND_UP_COLOR = new Color(0,255,0);
-	private static final Color TREND_DOWN_COLOR = new Color(255,0,0);
+	private static final Color TREND_UP_COLOR = new Color(0, 255, 0);
+	private static final Color TREND_DOWN_COLOR = new Color(255, 0, 0);
 
 	}

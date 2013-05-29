@@ -60,11 +60,6 @@ public class JPanelSummary extends JPanel
 		jPanelMeteoEventGraphPression.refresh();
 		}
 
-	public void updateGUI()
-		{
-
-		}
-
 	public void addAfficheurServiceMOO(AfficheurServiceMOO afficheurServiceMOO)
 		{
 		jPanelMeteoEventGraphTemperature.addDatas(afficheurServiceMOO.getListTemperature(), afficheurServiceMOO.getTitre());

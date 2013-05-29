@@ -42,12 +42,6 @@ public class JPanelDialPressure extends JPanel
 		apparence();
 		}
 
-	private void createDataset()
-		{
-		currentSeaLevelPressure = new DefaultValueDataset(0.0);
-		currentPressure = new DefaultValueDataset(0.0);
-		}
-
 	/*------------------------------------------------------------------*\
 	|*							Methodes Public							*|
 	\*------------------------------------------------------------------*/
@@ -61,10 +55,11 @@ public class JPanelDialPressure extends JPanel
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
-	@Override
-	public Dimension getMaximumSize()
+
+	private void createDataset()
 		{
-		return new Dimension(300, 300);
+		currentSeaLevelPressure = new DefaultValueDataset(0.0);
+		currentPressure = new DefaultValueDataset(0.0);
 		}
 
 	private void control()
@@ -147,6 +142,16 @@ public class JPanelDialPressure extends JPanel
 
 		ChartPanel chartpanel = new ChartPanel(jfreechart, false);
 		return chartpanel;
+		}
+
+	/*------------------------------*\
+	|*				Get				*|
+	\*------------------------------*/
+
+	@Override
+	public Dimension getMaximumSize()
+		{
+		return new Dimension(300, 300);
 		}
 
 	/*------------------------------------------------------------------*\

@@ -54,13 +54,13 @@ public class JPanelSwitzerland extends JPanel
 		return new Dimension(300, 300);
 		}
 
-@Override
-@Transient
-public Dimension getMaximumSize()
-	{
+	@Override
+	@Transient
+	public Dimension getMaximumSize()
+		{
 
-	return new Dimension(SWITZERLAND.getWidth(this), SWITZERLAND.getHeight(this));
-	}
+		return new Dimension(SWITZERLAND.getWidth(this), SWITZERLAND.getHeight(this));
+		}
 
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
@@ -102,10 +102,6 @@ public Dimension getMaximumSize()
 		g2d.fillOval(point.x, point.y, 5, 5);
 		}
 
-	/*------------------------------------------------------------------*\
-	|*							Attributs Private						*|
-	\*------------------------------------------------------------------*/
-
 	private Point positionOnScreenForCoordinate(final double LONGITUDE, final double LATITUDE)
 		{
 		double longitudePositionInPercent = 1 - (MAX_LONGITUDE - LONGITUDE) / (MAX_LONGITUDE - MIN_LONGITUDE);
@@ -116,6 +112,10 @@ public Dimension getMaximumSize()
 
 		return new Point(x, y);
 		}
+
+	/*------------------------------------------------------------------*\
+	|*							Attributs Private						*|
+	\*------------------------------------------------------------------*/
 
 	//Inputs
 	private AfficheurServiceMOO afficheurServiceMOO;

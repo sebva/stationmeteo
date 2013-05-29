@@ -92,6 +92,10 @@ public class JPanelStation extends JPanel
 		return this.afficheurServiceMOO;
 		}
 
+	/*------------------------------*\
+	|*				Is				*|
+	\*------------------------------*/
+
 	public boolean isConnected()
 		{
 		try
@@ -171,8 +175,6 @@ public class JPanelStation extends JPanel
 	/*------------------------------------------------------------------*\
 	|*							Attributs Private						*|
 	\*------------------------------------------------------------------*/
-
-	//Tools
 
 	// Inputs
 	private AfficheurServiceMOO afficheurServiceMOO;
