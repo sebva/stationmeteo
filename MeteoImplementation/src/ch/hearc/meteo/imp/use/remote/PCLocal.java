@@ -2,7 +2,7 @@
 package ch.hearc.meteo.imp.use.remote;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -39,11 +39,11 @@ public class PCLocal implements PC_I
 		this.rmiURLafficheurManager = rmiURLafficheurManager;
 		this.lostConnection = false;
 
-		meteoServiceWrappers = new ArrayList<MeteoServiceWrapper_I>();
-		afficheurServiceWrappers = new ArrayList<AfficheurServiceWrapper_I>();
-		meteoServices = new ArrayList<MeteoService_I>();
-		rmiURLs = new ArrayList<RmiURL>();
-		portComs = new ArrayList<>();
+		meteoServiceWrappers = new LinkedList<MeteoServiceWrapper_I>();
+		afficheurServiceWrappers = new LinkedList<AfficheurServiceWrapper_I>();
+		meteoServices = new LinkedList<MeteoService_I>();
+		rmiURLs = new LinkedList<RmiURL>();
+		portComs = new LinkedList<String>();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -58,7 +58,6 @@ public class PCLocal implements PC_I
 			//Remote
 			afficheurManagerRemote = (AfficheurManager_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
 			afficheurService = AfficheurFactory.create(affichageOptions, null, this);
-
 			}
 		catch (RemoteException e)
 			{
@@ -68,26 +67,28 @@ public class PCLocal implements PC_I
 
 	public void addStation(String portCom)
 		{
-		if (portComs.contains(portCom)) { return; }
-		portComs.add(portCom);
-		try
+		if (!portComs.contains(portCom))
 			{
-			server(); // avant
-			}
-		catch (Exception e)
-			{
-			System.err.println("[PCLocal :  run : server : failed");
-			e.printStackTrace();
-			}
+			portComs.add(portCom);
+			try
+				{
+				server(); // avant
+				}
+			catch (Exception e)
+				{
+				System.err.println("[PCLocal :  run : server : failed");
+				e.printStackTrace();
+				}
 
-		try
-			{
-			client(); // après
-			}
-		catch (RemoteException e)
-			{
-			System.err.println("[PCLocal :  run : client : failed");
-			e.printStackTrace();
+			try
+				{
+				client(); // après
+				}
+			catch (RemoteException e)
+				{
+				System.err.println("[PCLocal :  run : client : failed");
+				e.printStackTrace();
+				}
 			}
 		}
 
@@ -96,7 +97,11 @@ public class PCLocal implements PC_I
 		try
 			{
 			int index = portComs.indexOf(portCom);
-			meteoServices.get(index).disconnect();
+			meteoServices.remove(index).disconnect();
+			meteoServiceWrappers.remove(index);
+			rmiURLs.remove(index);
+			portComs.remove(index);
+			afficheurServiceWrappers.remove(index);
 			}
 		catch (MeteoServiceException e)
 			{
@@ -116,7 +121,7 @@ public class PCLocal implements PC_I
 		{
 		try
 			{
-			MeteoService_I meteoService = MeteoServiceFactory.create(portComs.get(portComs.size()-1));
+			MeteoService_I meteoService = MeteoServiceFactory.create(portComs.get(portComs.size() - 1));
 			MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 			RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
 
@@ -144,7 +149,7 @@ public class PCLocal implements PC_I
 			afficheurService = AfficheurFactory.create(affichageOptions, meteoServiceWrappers.get(meteoServiceWrappers.size() - 1), this);
 
 			RmiURL rmiURLafficheurServiceWrapper = afficheurManagerRemote.createRemoteAfficheurService(affichageOptions, rmiURLs.get(rmiURLs.size() - 1));
-			AfficheurServiceWrapper_I afficheurServiceWrapper = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurServiceWrapper);
+			final AfficheurServiceWrapper_I afficheurServiceWrapper = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurServiceWrapper);
 			afficheurServiceWrappers.add(afficheurServiceWrapper);
 
 			MeteoService_I meteoService = meteoServices.get(meteoServices.size() - 1);
@@ -159,7 +164,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printTemperature(event);
-								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printTemperature(event);
+								afficheurServiceWrapper.printTemperature(event);
 								}
 							}
 						catch (RemoteException e)
@@ -176,7 +181,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printPression(event);
-								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printPression(event);
+								afficheurServiceWrapper.printPression(event);
 								}
 							}
 						catch (RemoteException e)
@@ -193,7 +198,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printAltitude(event);
-								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printAltitude(event);
+								afficheurServiceWrapper.printAltitude(event);
 								}
 							}
 						catch (RemoteException e)
@@ -214,10 +219,13 @@ public class PCLocal implements PC_I
 
 	private void gestionErreur()
 		{
-		lostConnection = true;
-		System.err.println("Connexion perdue. Veuillez relancer une instance !");
-		JOptionPane.showMessageDialog(null, "Connexion perdue. Vérifier l'état du serveur puis relancez le programme ! Appuyer sur OK pour quitter.", "Connexion perdue", JOptionPane.ERROR_MESSAGE);
-		System.exit(-1);
+		synchronized (this)
+			{
+			lostConnection = true;
+			System.err.println("Connexion perdue. Veuillez relancer une instance !");
+			JOptionPane.showMessageDialog(null, "Connexion perdue. Vérifier l'état du serveur puis relancez le programme ! Appuyer sur OK pour quitter.", "Connexion perdue", JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+			}
 		}
 
 	/*------------------------------------------------------------------*\
