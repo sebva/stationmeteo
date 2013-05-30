@@ -29,31 +29,28 @@ public class JFrameAfficheurService extends JFrame
 		geometry();
 		control();
 		apparence();
-		if (isCentral)
+		Thread thread = new Thread(new Runnable()
 			{
-			Thread thread = new Thread(new Runnable()
-				{
 
-					@Override
-					public void run()
+				@Override
+				public void run()
+					{
+					while(true)
 						{
-						while(true)
+						try
 							{
-							try
-								{
-								verifyStation();
-								Thread.sleep(POOLING_DELAY);
-								}
-							catch (Exception e)
-								{
-								e.printStackTrace();
-								}
+							verifyStation();
+							Thread.sleep(POOLING_DELAY);
+							}
+						catch (Exception e)
+							{
+							e.printStackTrace();
 							}
 						}
-				});
+					}
+			});
 
-			thread.start();
-			}
+		thread.start();
 		}
 
 	/*------------------------------------------------------------------*\
