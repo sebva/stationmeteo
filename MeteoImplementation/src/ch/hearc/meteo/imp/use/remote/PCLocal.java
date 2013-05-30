@@ -68,7 +68,7 @@ public class PCLocal implements PC_I
 
 	public void addStation(String portCom)
 		{
-		if (!portComs.contains(portCom)) { return; }
+		if (portComs.contains(portCom)) { return; }
 		portComs.add(portCom);
 		try
 			{
