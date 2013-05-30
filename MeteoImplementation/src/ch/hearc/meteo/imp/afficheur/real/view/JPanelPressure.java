@@ -5,9 +5,11 @@ import java.awt.Color;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ch.hearc.meteo.imp.afficheur.real.ImageTools;
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 import ch.hearc.meteo.imp.afficheur.real.moo.Pressure;
 import ch.hearc.meteo.imp.afficheur.real.moo.Trend;
@@ -42,6 +44,7 @@ public class JPanelPressure extends JPanel
 		jLabelMeanPressure.setText(String.format("Pression moyenne : %.2f", afficheurServiceMOO.getStatPression().getMovingAverage()) + JPanelDialPressure.UNITY);
 
 		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Temps : ");
 
 		if (pressure.getSeaLevelPressure() < 1000)
 			{
@@ -58,12 +61,12 @@ public class JPanelPressure extends JPanel
 
 		if (afficheurServiceMOO.getStatPression().getTrend() == Trend.up)
 			{
-			stringBuilder.append(" \u25B2");
+jLabelTrend.setIcon(UP);
 			jLabelTrend.setForeground(TREND_UP_COLOR);
 			}
 		else if (afficheurServiceMOO.getStatPression().getTrend() == Trend.down)
 			{
-			stringBuilder.append(" \u25BC");
+			jLabelTrend.setIcon(DOWN);
 			jLabelTrend.setForeground(TREND_DOWN_COLOR);
 			}
 
@@ -131,7 +134,12 @@ public class JPanelPressure extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	private static final Color TREND_UP_COLOR = new Color(0, 255, 0);
-	private static final Color TREND_DOWN_COLOR = new Color(255, 0, 0);
+	private static final Color TREND_UP_COLOR = new Color(39, 174, 96);
+	private static final Color TREND_DOWN_COLOR = new Color(192, 57, 43);
+
+	private static final String UP_PATH = "images/up.png";
+	private static final String DOWN_PATH = "images/down.png";
+	private static final Icon UP = ImageTools.loadIconJar(UP_PATH, true);
+	private static final Icon DOWN = ImageTools.loadIconJar(DOWN_PATH, true);
 
 	}

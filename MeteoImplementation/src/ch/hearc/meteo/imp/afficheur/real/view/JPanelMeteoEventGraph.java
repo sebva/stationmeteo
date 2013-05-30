@@ -221,6 +221,7 @@ public class JPanelMeteoEventGraph extends JPanel
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setRangeGridlinePaint(Color.BLACK);
 
+
 		plot.setDomainCrosshairVisible(true);
 
 		domainAxis = (DateAxis)plot.getDomainAxis();
