@@ -3,9 +3,7 @@ package ch.hearc.meteo.imp.use.remote;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import javax.swing.JOptionPane;
 
@@ -46,7 +44,6 @@ public class PCLocal implements PC_I
 		meteoServices = new ArrayList<MeteoService_I>();
 		rmiURLs = new ArrayList<RmiURL>();
 		portComs = new ArrayList<>();
-		newPortComs = new LinkedList<String>();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -72,7 +69,7 @@ public class PCLocal implements PC_I
 	public void addStation(String portCom)
 		{
 		if (portComs.contains(portCom)) { return; }
-		newPortComs.add(portCom);
+		portComs.add(portCom);
 		try
 			{
 			server(); // avant
@@ -119,7 +116,7 @@ public class PCLocal implements PC_I
 		{
 		try
 			{
-			MeteoService_I meteoService = MeteoServiceFactory.create(newPortComs.poll());
+			MeteoService_I meteoService = MeteoServiceFactory.create(portComs.get(portComs.size()-1));
 			MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 			RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
 
@@ -240,7 +237,6 @@ public class PCLocal implements PC_I
 	private List<MeteoService_I> meteoServices;
 	private AfficheurManager_I afficheurManagerRemote;
 
-	private Queue<String> newPortComs;
 	private AfficheurService_I afficheurService;
 	private boolean lostConnection;
 	private final static String PREFIX = "WRAPPER";
