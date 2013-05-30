@@ -56,10 +56,9 @@ public class UsePCLocal
 			int n = 100;
 			MeteoServiceOptions meteoServiceOptions = new MeteoServiceOptions(n,  n, n);
 			AffichageOptions affichageOptions = new AffichageOptions(n, name + ";" + latitude + ";" + longitude);
-			System.setProperty("sun.rmi.activation.execTimeout", "1000");
-			System.setProperty("sun.rmi.transport.tcp.responseTimeout", "1000");
 
-			new PCLocal(meteoServiceOptions, affichageOptions, rmiUrl).run();
+			PCLocal pc = new PCLocal(meteoServiceOptions, affichageOptions, rmiUrl);
+			pc.run();
 			}
 		catch (Exception e)
 			{

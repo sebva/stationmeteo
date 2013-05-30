@@ -44,7 +44,6 @@ public class PCLocal implements PC_I
 		meteoServices = new ArrayList<MeteoService_I>();
 		rmiURLs = new ArrayList<RmiURL>();
 		portComs = new ArrayList<>();
-		portComs.add("COM4");
 		}
 
 	/*------------------------------------------------------------------*\
@@ -54,6 +53,23 @@ public class PCLocal implements PC_I
 	@Override
 	public void run()
 		{
+		try
+			{
+			//Remote
+			afficheurManagerRemote = (AfficheurManager_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
+			afficheurService = AfficheurFactory.create(affichageOptions, null, this);
+
+			}
+		catch (RemoteException e)
+			{
+			e.printStackTrace();
+			}
+		}
+
+	public void addStation(String portCom)
+		{
+		if (!portComs.contains(portCom)) { return; }
+		portComs.add(portCom);
 		try
 			{
 			server(); // avant
@@ -75,6 +91,19 @@ public class PCLocal implements PC_I
 			}
 		}
 
+	public void removePortCom(String portCom)
+		{
+		try
+			{
+			int index = portComs.indexOf(portCom);
+			meteoServices.get(index).disconnect();
+			}
+		catch (MeteoServiceException e)
+			{
+			e.printStackTrace();
+			}
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
@@ -87,18 +116,15 @@ public class PCLocal implements PC_I
 		{
 		try
 			{
-			for(String portCom:portComs)
-				{
-				MeteoService_I meteoService = MeteoServiceFactory.create(portCom);
-				MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
-				RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
+			MeteoService_I meteoService = MeteoServiceFactory.create(portComs.get(portComs.size() - 1));
+			MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
+			RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
 
-				meteoServices.add(meteoService);
-				meteoServiceWrappers.add(meteoServiceWrapper);
-				rmiURLs.add(rmiURL);
+			meteoServices.add(meteoService);
+			meteoServiceWrappers.add(meteoServiceWrapper);
+			rmiURLs.add(rmiURL);
 
-				RmiTools.shareObject(meteoServiceWrapper, rmiURL);
-				}
+			RmiTools.shareObject(meteoServiceWrapper, rmiURL);
 			}
 		catch (Exception e)
 			{
@@ -115,90 +141,79 @@ public class PCLocal implements PC_I
 		try
 			{
 			//Local
-			for(MeteoServiceWrapper_I meteoServiceWrapper:meteoServiceWrappers)
+			afficheurService = AfficheurFactory.create(affichageOptions, meteoServiceWrappers.get(meteoServiceWrappers.size() - 1), this);
+
+			RmiURL rmiURLafficheurServiceWrapper = afficheurManagerRemote.createRemoteAfficheurService(affichageOptions, rmiURLs.get(rmiURLs.size() - 1));
+			AfficheurServiceWrapper_I afficheurServiceWrapper = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurServiceWrapper);
+			afficheurServiceWrappers.add(afficheurServiceWrapper);
+
+			MeteoService_I meteoService = meteoServices.get(meteoServices.size() - 1);
+			meteoService.addMeteoListener(new MeteoListener_I()
 				{
-				afficheurService = AfficheurFactory.create(affichageOptions, meteoServiceWrapper);
-				}
 
-			//Remote
-			AfficheurManager_I afficheurManagerRemote = (AfficheurManager_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurManager);
-
-			for(RmiURL rmiURL:rmiURLs)
-				{
-				RmiURL rmiURLafficheurServiceWrapper = afficheurManagerRemote.createRemoteAfficheurService(affichageOptions, rmiURL);
-				AfficheurServiceWrapper_I afficheurServiceWrapper = (AfficheurServiceWrapper_I)RmiTools.connectionRemoteObjectBloquant(rmiURLafficheurServiceWrapper);
-				afficheurServiceWrappers.add(afficheurServiceWrapper);
-				}
-
-			for(MeteoService_I meteoService:meteoServices)
-				{
-				meteoService.addMeteoListener(new MeteoListener_I()
-					{
-
-						@Override
-						public void temperaturePerformed(MeteoEvent event)
+					@Override
+					public void temperaturePerformed(MeteoEvent event)
+						{
+						try
 							{
-							try
+							if (!lostConnection)
 								{
-								if (!lostConnection)
+								afficheurService.printTemperature(event);
+								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
 									{
-									afficheurService.printTemperature(event);
-									for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-										{
-										afficheurServiceWrapper.printTemperature(event);
-										}
+									afficheurServiceWrapper.printTemperature(event);
 									}
 								}
-							catch (RemoteException e)
-								{
-								gestionErreur();
-								}
 							}
-
-						@Override
-						public void pressionPerformed(MeteoEvent event)
+						catch (RemoteException e)
 							{
-							try
+							gestionErreur();
+							}
+						}
+
+					@Override
+					public void pressionPerformed(MeteoEvent event)
+						{
+						try
+							{
+							if (!lostConnection)
 								{
-								if (!lostConnection)
+								afficheurService.printPression(event);
+								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
 									{
-									afficheurService.printPression(event);
-									for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-										{
-										afficheurServiceWrapper.printPression(event);
-										}
+									afficheurServiceWrapper.printPression(event);
 									}
 								}
-							catch (RemoteException e)
-								{
-								gestionErreur();
-								}
 							}
-
-						@Override
-						public void altitudePerformed(MeteoEvent event)
+						catch (RemoteException e)
 							{
-							try
+							gestionErreur();
+							}
+						}
+
+					@Override
+					public void altitudePerformed(MeteoEvent event)
+						{
+						try
+							{
+							if (!lostConnection)
 								{
-								if (!lostConnection)
+								afficheurService.printAltitude(event);
+								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
 									{
-									afficheurService.printAltitude(event);
-									for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-										{
-										afficheurServiceWrapper.printAltitude(event);
-										}
+									afficheurServiceWrapper.printAltitude(event);
 									}
 								}
-							catch (RemoteException e)
-								{
-								gestionErreur();
-								}
 							}
-					});
+						catch (RemoteException e)
+							{
+							gestionErreur();
+							}
+						}
+				});
 
-				meteoService.connect();
-				meteoService.start(meteoServiceOptions);
-				}
+			meteoService.connect();
+			meteoService.start(meteoServiceOptions);
 			}
 		catch (Exception e)
 			{
@@ -229,6 +244,7 @@ public class PCLocal implements PC_I
 	private List<RmiURL> rmiURLs;
 	private List<AfficheurServiceWrapper_I> afficheurServiceWrappers;
 	private List<MeteoService_I> meteoServices;
+	private AfficheurManager_I afficheurManagerRemote;
 
 	private AfficheurService_I afficheurService;
 	private boolean lostConnection;

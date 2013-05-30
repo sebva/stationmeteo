@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import ch.hearc.meteo.imp.afficheur.real.ImageTools;
+import ch.hearc.meteo.imp.use.remote.PCLocal;
 
 public class JFrameAfficheurService extends JFrame
 	{
@@ -90,6 +91,16 @@ public class JFrameAfficheurService extends JFrame
 			}
 		}
 
+	public void setPCLocal(PCLocal pc)
+		{
+		this.pc = pc;
+		}
+
+	public PCLocal getPCLocal()
+		{
+		return pc;
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
@@ -134,6 +145,7 @@ public class JFrameAfficheurService extends JFrame
 	private JPanelSummary jPanelSummary;
 	private JPanelComPort jPanelComPort;
 	private boolean isCentral;
+	private PCLocal pc;
 
 	/*------------------------------*\
 	|*			  Static			*|
