@@ -187,7 +187,7 @@ public class JPanelDialPressure extends JPanel
 	|*			  Static			*|
 	\*------------------------------*/
 
-	public static final String TITLE = "Pression atmosphï¿½rique";
+	public static final String TITLE = "Pression atmosphérique";
 	public static final String UNITY = "hPa";
 	private static final Double MIN_PRESSURE_SEA = 970.0;
 	private static final Double MAX_PRESSURE_SEA = 1060.0;

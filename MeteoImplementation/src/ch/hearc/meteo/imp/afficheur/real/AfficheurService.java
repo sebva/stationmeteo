@@ -25,7 +25,7 @@ public class AfficheurService implements AfficheurService_I
 	public AfficheurService(String titre, int n, MeteoServiceWrapper_I meteoServiceRemote)
 		{
 
-		jFrameAfficheurService = JFrameAfficheurService.getInstance(meteoServiceRemote == null);
+		jFrameAfficheurService = JFrameAfficheurService.getInstance(n == -1);
 
 		if (meteoServiceRemote != null)
 			{
