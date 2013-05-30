@@ -39,7 +39,7 @@ public class PCCentral implements PC_I
 		try
 			{
 			AfficheurManager_I afficheurManager = AfficheurManagerFactory.create();
-			AfficheurFactory.create(affichageOptions, null);
+			AfficheurFactory.create(affichageOptions, null, null);
 			}
 		catch (RemoteException e)
 			{

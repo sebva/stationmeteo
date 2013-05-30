@@ -83,7 +83,7 @@ public class AfficheurManager implements AfficheurManager_I
 
 	private AfficheurService_I createAfficheurService(AffichageOptions affichageOptions, MeteoServiceWrapper_I meteoServiceRemote)
 		{
-		return AfficheurFactory.create(affichageOptions, meteoServiceRemote);
+		return AfficheurFactory.create(affichageOptions, meteoServiceRemote, null);
 		}
 
 	private void server() throws RemoteException

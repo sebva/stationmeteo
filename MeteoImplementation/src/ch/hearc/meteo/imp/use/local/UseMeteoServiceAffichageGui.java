@@ -39,7 +39,7 @@ public class UseMeteoServiceAffichageGui
 		MeteoServiceWrapper_I meteoServiceWrapperForRemoteAccess = new MeteoServiceWrapper(meteoService);
 
 		AffichageOptions affichageOptions = new AffichageOptions(3, titre);
-		final AfficheurServiceWrapper_I afficheurService = (AfficheurServiceWrapper_I)AfficheurFactory.create(affichageOptions, meteoServiceWrapperForRemoteAccess);
+		final AfficheurServiceWrapper_I afficheurService = (AfficheurServiceWrapper_I)AfficheurFactory.create(affichageOptions, meteoServiceWrapperForRemoteAccess, null);
 
 		meteoService.connect();
 

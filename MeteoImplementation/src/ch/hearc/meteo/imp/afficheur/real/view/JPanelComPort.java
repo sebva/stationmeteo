@@ -29,6 +29,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 import ch.hearc.meteo.imp.afficheur.real.ImageTools;
+import ch.hearc.meteo.imp.use.remote.PCLocal;
 import ch.hearc.meteo.spec.meteo.MeteoPortDetectionServiceFactory;
 import ch.hearc.meteo.spec.meteo.MeteoPortDetectionService_I;
 
@@ -274,6 +275,11 @@ public class JPanelComPort extends JPanel
 				}
 
 			selectedPorts.add(port.getKey());
+			}
+		PCLocal pc = JFrameAfficheurService.getInstance(false).getPCLocal();
+		for(String port:selectedPorts)
+			{
+			pc.addStation(port);
 			}
 		}
 
