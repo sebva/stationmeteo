@@ -90,7 +90,10 @@ public class JFrameAfficheurService extends JFrame
 
 	public void setPCLocal(PCLocal pc)
 		{
-		this.pc = pc;
+		if (this.pc == null && pc != null)
+			{
+			this.pc = pc;
+			}
 		}
 
 	public PCLocal getPCLocal()

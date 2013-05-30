@@ -313,7 +313,6 @@ public class JPanelComPort extends JPanel
 
 	private void addStation(Entry<String, Boolean> port)
 		{
-		System.out.println("test");
 		detectedListModel.removeElement(port);
 		connectedListModel.addElement(port);
 

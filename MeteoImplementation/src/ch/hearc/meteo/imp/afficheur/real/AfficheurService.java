@@ -30,6 +30,7 @@ public class AfficheurService implements AfficheurService_I
 
 		if (meteoServiceRemote != null)
 			{
+			System.out.println(meteoServiceRemote.hashCode());
 			afficheurServiceMOO = new AfficheurServiceMOO(titre, n, meteoServiceRemote);
 			jPanelStation = new JPanelStation(afficheurServiceMOO);
 			jFrameAfficheurService.addNewStation(jPanelStation);
