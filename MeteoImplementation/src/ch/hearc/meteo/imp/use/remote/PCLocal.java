@@ -3,7 +3,9 @@ package ch.hearc.meteo.imp.use.remote;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.swing.JOptionPane;
 
@@ -44,6 +46,7 @@ public class PCLocal implements PC_I
 		meteoServices = new ArrayList<MeteoService_I>();
 		rmiURLs = new ArrayList<RmiURL>();
 		portComs = new ArrayList<>();
+		newPortComs = new LinkedList<String>();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -69,7 +72,7 @@ public class PCLocal implements PC_I
 	public void addStation(String portCom)
 		{
 		if (portComs.contains(portCom)) { return; }
-		portComs.add(portCom);
+		newPortComs.add(portCom);
 		try
 			{
 			server(); // avant
@@ -116,7 +119,7 @@ public class PCLocal implements PC_I
 		{
 		try
 			{
-			MeteoService_I meteoService = MeteoServiceFactory.create(portComs.get(portComs.size() - 1));
+			MeteoService_I meteoService = MeteoServiceFactory.create(newPortComs.poll());
 			MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 			RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
 
@@ -159,10 +162,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printTemperature(event);
-								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-									{
-									afficheurServiceWrapper.printTemperature(event);
-									}
+								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printTemperature(event);
 								}
 							}
 						catch (RemoteException e)
@@ -179,10 +179,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printPression(event);
-								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-									{
-									afficheurServiceWrapper.printPression(event);
-									}
+								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printPression(event);
 								}
 							}
 						catch (RemoteException e)
@@ -199,10 +196,7 @@ public class PCLocal implements PC_I
 							if (!lostConnection)
 								{
 								afficheurService.printAltitude(event);
-								for(AfficheurServiceWrapper_I afficheurServiceWrapper:afficheurServiceWrappers)
-									{
-									afficheurServiceWrapper.printAltitude(event);
-									}
+								afficheurServiceWrappers.get(afficheurServiceWrappers.size()-1).printAltitude(event);
 								}
 							}
 						catch (RemoteException e)
@@ -246,6 +240,7 @@ public class PCLocal implements PC_I
 	private List<MeteoService_I> meteoServices;
 	private AfficheurManager_I afficheurManagerRemote;
 
+	private Queue<String> newPortComs;
 	private AfficheurService_I afficheurService;
 	private boolean lostConnection;
 	private final static String PREFIX = "WRAPPER";
