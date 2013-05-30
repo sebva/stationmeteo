@@ -100,6 +100,11 @@ public class JFrameAfficheurService extends JFrame
 		add(tabbedPane);
 		jPanelSummary = new JPanelSummary();
 		tabbedPane.add("Summary", jPanelSummary);
+		if (!isCentral)
+			{
+			jPanelComPort = new JPanelComPort();
+			tabbedPane.add("Serial ports", jPanelComPort);
+			}
 		}
 
 	private void control()
@@ -127,6 +132,7 @@ public class JFrameAfficheurService extends JFrame
 	private List<JPanelStation> jPanelStations;
 	private JTabbedPane tabbedPane;
 	private JPanelSummary jPanelSummary;
+	private JPanelComPort jPanelComPort;
 	private boolean isCentral;
 
 	/*------------------------------*\
