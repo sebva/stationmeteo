@@ -6,9 +6,10 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,7 +22,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -79,13 +79,15 @@ public class JPanelComPort extends JPanel
 		banList = new JList<>(banListModel);
 		detectedListModel = new DefaultListModel<>();
 		detectedList = new JList<>(detectedListModel);
+		connectedListModel = new DefaultListModel<>();
+		connectedList = new JList<>(connectedListModel);
 
 		refreshBanListButton = new JButton("Rafraîchir la liste des ports");
 		detectButton = new JButton("Lancer la détection");
-		validateButton = new JButton("Valider");
 
 		lblDetectedPorts = new JLabel("Ports détectés");
 		lblPortsToBan = new JLabel("Ports à bannir de la détection");
+		lblConnectedPorts = new JLabel("Stations connectées");
 
 		detectionProgress = new JProgressBar(0, 100);
 
@@ -103,15 +105,27 @@ public class JPanelComPort extends JPanel
 		jPanelDetection.add(detectButton, BorderLayout.SOUTH);
 		box.add(jPanelDetection);
 		box.add(Box.createVerticalStrut(20));
-		JPanel jPanelValidation = new JPanel(new BorderLayout());
-		jPanelValidation.add(validateButton, BorderLayout.CENTER);
-		box.add(jPanelValidation);
+		box.add(lblConnectedPorts);
+		JPanel jPanelConnectedPorts = new JPanel(new BorderLayout());
+		jPanelConnectedPorts.add(new JScrollPane(connectedList), BorderLayout.CENTER);
+		box.add(jPanelConnectedPorts);
 
 		add(box);
 		}
 
 	private void control()
 		{
+		refreshBanListButton.addActionListener(new ActionListener()
+			{
+
+				@Override
+				public void actionPerformed(ActionEvent e)
+					{
+					banListModel.clear();
+					populateBanList();
+					}
+			});
+
 		detectButton.addActionListener(new ActionListener()
 			{
 
@@ -122,13 +136,35 @@ public class JPanelComPort extends JPanel
 					}
 			});
 
-		validateButton.addActionListener(new ActionListener()
+		detectedList.addMouseListener(new MouseAdapter()
 			{
 
 				@Override
-				public void actionPerformed(ActionEvent e)
+				public void mouseClicked(MouseEvent evt)
 					{
-					applyChanges();
+					@SuppressWarnings("unchecked")
+					JList<Entry<String, Boolean>> list = (JList<Entry<String, Boolean>>)evt.getSource();
+					if (evt.getClickCount() == 2)
+						{
+						int index = list.locationToIndex(evt.getPoint());
+						addStation(detectedListModel.get(index));
+						}
+					}
+			});
+
+		connectedList.addMouseListener(new MouseAdapter()
+			{
+
+				@Override
+				public void mouseClicked(MouseEvent evt)
+					{
+					@SuppressWarnings("unchecked")
+					JList<Entry<String, Boolean>> list = (JList<Entry<String, Boolean>>)evt.getSource();
+					if (evt.getClickCount() == 2)
+						{
+						int index = list.locationToIndex(evt.getPoint());
+						removeStation(connectedListModel.get(index));
+						}
 					}
 			});
 		}
@@ -138,11 +174,14 @@ public class JPanelComPort extends JPanel
 		setBackground(JFrameAfficheurService.BACKGROUND_COLOR);
 		JPanelStation.setupJLabelStyle(lblDetectedPorts, 18);
 		JPanelStation.setupJLabelStyle(lblPortsToBan, 18);
+		JPanelStation.setupJLabelStyle(lblConnectedPorts, 18);
 
 		lblDetectedPorts.setAlignmentX(CENTER_ALIGNMENT);
 		lblPortsToBan.setAlignmentX(CENTER_ALIGNMENT);
+		lblConnectedPorts.setAlignmentX(CENTER_ALIGNMENT);
 		lblDetectedPorts.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPortsToBan.setHorizontalAlignment(SwingConstants.CENTER);
+		lblConnectedPorts.setHorizontalAlignment(SwingConstants.CENTER);
 
 		detectButton.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -168,13 +207,28 @@ public class JPanelComPort extends JPanel
 				public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 					{
 					@SuppressWarnings("unchecked")
-					Entry<String, Boolean> realValue = (Entry<String, Boolean>)value;
-
+					final Entry<String, Boolean> realValue = (Entry<String, Boolean>)value;
 					super.getListCellRendererComponent(list, realValue.getKey(), index, isSelected, cellHasFocus);
 
 					String path = realValue.getValue() ? "images/meteo.png" : "images/no-meteo.png";
 					ImageIcon icon = ImageTools.loadIconJar(path, true);
+
 					setIcon(icon);
+
+					return this;
+					}
+			});
+
+		connectedList.setCellRenderer(new DefaultListCellRenderer()
+			{
+
+				@Override
+				public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+					{
+					@SuppressWarnings("unchecked")
+					final Entry<String, Boolean> realValue = (Entry<String, Boolean>)value;
+					super.getListCellRendererComponent(list, realValue.getKey(), index, isSelected, cellHasFocus);
+
 					return this;
 					}
 			});
@@ -196,7 +250,7 @@ public class JPanelComPort extends JPanel
 		detectButton.setEnabled(false);
 
 		SwingWorker<Map<String, Boolean>, Integer> worker = new SwingWorker<Map<String, Boolean>, Integer>()
-					{
+			{
 
 				@Override
 				protected Map<String, Boolean> doInBackground() throws Exception
@@ -211,7 +265,7 @@ public class JPanelComPort extends JPanel
 					Map<String, Boolean> map = new TreeMap<>();
 					for(String port:allPorts)
 						{
-						if(!bannedPorts.contains(port))
+						if (!bannedPorts.contains(port))
 							{
 							map.put(port, detectionService.isStationMeteoAvailable(port));
 							setProgress((100 * ++current) / nbPorts);
@@ -257,30 +311,23 @@ public class JPanelComPort extends JPanel
 		worker.execute();
 		}
 
-	private void applyChanges()
+	private void addStation(Entry<String, Boolean> port)
 		{
-		List<String> selectedPorts = new ArrayList<>(detectedListModel.size());
+		System.out.println("test");
+		detectedListModel.removeElement(port);
+		connectedListModel.addElement(port);
 
-		for(Entry<String, Boolean> port:detectedList.getSelectedValuesList())
-			{
-			// Pas une station météo
-			if (!port.getValue())
-				{
-				int result = JOptionPane.showConfirmDialog(this, port.getKey() + " n'a pas été détecté comme étant une station météo,  voulez-vous vraiment l'utiliser ?", "Pas une station météo", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-				if (result != JOptionPane.YES_OPTION)
-					{
-					continue;
-					}
-				}
-
-			selectedPorts.add(port.getKey());
-			}
 		PCLocal pc = JFrameAfficheurService.getInstance(false).getPCLocal();
-		for(String port:selectedPorts)
-			{
-			pc.addStation(port);
-			}
+		pc.addStation(port.getKey());
+		}
+
+	private void removeStation(final Entry<String, Boolean> port)
+		{
+		connectedListModel.removeElement(port);
+		detectedListModel.addElement(port);
+
+		PCLocal pc = JFrameAfficheurService.getInstance(false).getPCLocal();
+		pc.removePortCom(port.getKey());
 		}
 
 	/*------------------------------------------------------------------*\
@@ -292,11 +339,13 @@ public class JPanelComPort extends JPanel
 	private JList<Entry<String, Boolean>> detectedList;
 	private DefaultListModel<String> banListModel;
 	private JList<String> banList;
+	private DefaultListModel<Entry<String, Boolean>> connectedListModel;
+	private JList<Entry<String, Boolean>> connectedList;
 	private JButton refreshBanListButton;
 	private JButton detectButton;
-	private JButton validateButton;
 	private JProgressBar detectionProgress;
 	private MeteoPortDetectionService_I detectionService;
 	private JLabel lblDetectedPorts;
 	private JLabel lblPortsToBan;
+	private JLabel lblConnectedPorts;
 	}
