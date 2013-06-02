@@ -91,26 +91,37 @@ public class JPanelComPort extends JPanel
 
 		detectionProgress = new JProgressBar(0, 100);
 
-		Box box = Box.createVerticalBox();
-		box.add(lblPortsToBan);
+		Box mainBox = Box.createHorizontalBox();
+		Box leftBox = Box.createVerticalBox();
+		leftBox.add(lblPortsToBan);
 		JPanel jPanelBan = new JPanel(new BorderLayout());
 		jPanelBan.add(new JScrollPane(banList), BorderLayout.CENTER);
 		jPanelBan.add(refreshBanListButton, BorderLayout.SOUTH);
-		box.add(jPanelBan);
-		box.add(Box.createVerticalStrut(15));
-		box.add(lblDetectedPorts);
-		box.add(detectionProgress);
+		leftBox.add(jPanelBan);
+		leftBox.add(Box.createVerticalStrut(15));
+		leftBox.add(lblDetectedPorts);
+		leftBox.add(detectionProgress);
 		JPanel jPanelDetection = new JPanel(new BorderLayout());
 		jPanelDetection.add(new JScrollPane(detectedList), BorderLayout.CENTER);
 		jPanelDetection.add(detectButton, BorderLayout.SOUTH);
-		box.add(jPanelDetection);
-		box.add(Box.createVerticalStrut(20));
-		box.add(lblConnectedPorts);
+		leftBox.add(jPanelDetection);
+		leftBox.add(Box.createVerticalStrut(20));
+		leftBox.add(lblConnectedPorts);
 		JPanel jPanelConnectedPorts = new JPanel(new BorderLayout());
 		jPanelConnectedPorts.add(new JScrollPane(connectedList), BorderLayout.CENTER);
-		box.add(jPanelConnectedPorts);
+		leftBox.add(jPanelConnectedPorts);
 
-		add(box);
+		Box rightBox = Box.createVerticalBox();
+		rightBox.add(Box.createVerticalGlue());
+		rightBox.add(new JLabel("<html><b style=\"color:#f1c40f;\">Projet station météo<br />Alexandre Perez - INF2dlm-a<br />Diego Antognini - INF2dlm-a<br />Sébastien Vaucher - INF2dlm-b<br /><br />Copyright &copy; HE-Arc - 2013<b></html>"));
+		rightBox.add(Box.createVerticalStrut(30));
+		rightBox.add(new JLabel(ImageTools.loadIconJar("images/hearc.png", true)));
+
+		mainBox.add(leftBox);
+		mainBox.add(Box.createHorizontalStrut(50));
+		mainBox.add(rightBox);
+
+		add(mainBox);
 		}
 
 	private void control()

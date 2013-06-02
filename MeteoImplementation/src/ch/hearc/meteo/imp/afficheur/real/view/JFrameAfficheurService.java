@@ -110,13 +110,15 @@ public class JFrameAfficheurService extends JFrame
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setUI(new MeteoTabbedPaneUI());
 		add(tabbedPane);
-		jPanelSummary = new JPanelSummary();
-		tabbedPane.add("Summary", jPanelSummary);
+
 		if (!isCentral)
 			{
 			jPanelComPort = new JPanelComPort();
-			tabbedPane.add("Serial ports", jPanelComPort);
+			tabbedPane.add("Gestion stations météo", jPanelComPort);
 			}
+
+		jPanelSummary = new JPanelSummary();
+		tabbedPane.add("Résumé", jPanelSummary);
 		}
 
 	private void control()

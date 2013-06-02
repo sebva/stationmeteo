@@ -229,11 +229,15 @@ public class JPanelMeteoEventGraph extends JPanel
 		plot.setDomainCrosshairVisible(true);
 
 		domainAxis = (DateAxis)plot.getDomainAxis();
+		domainAxis.setTickLabelPaint(JFrameAfficheurService.FOREGROUND_COLOR);
+		domainAxis.setLabelPaint(JFrameAfficheurService.FOREGROUND_COLOR);
 		domainAxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss"));
 		plot.getRenderer().setSeriesPaint(0, plotColor);
 		plot.getRenderer().setBaseStroke(new BasicStroke(2));
 		((AbstractRenderer)plot.getRenderer()).setAutoPopulateSeriesStroke(false);
 		rangeAxis = plot.getRangeAxis();
+		rangeAxis.setTickLabelPaint(JFrameAfficheurService.FOREGROUND_COLOR);
+		rangeAxis.setLabelPaint(JFrameAfficheurService.FOREGROUND_COLOR);
 		setRange();
 		setDomain();
 
