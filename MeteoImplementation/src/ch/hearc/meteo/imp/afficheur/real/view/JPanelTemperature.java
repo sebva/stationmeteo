@@ -56,7 +56,7 @@ public class JPanelTemperature extends JPanel
 		{
 		setLayout(new BorderLayout());
 
-		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, X_LABEL, Y_LABEL, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, false);
+		jPanelGraphTemperature = new JPanelMeteoEventGraph(TITLE, JPanelSummary.THERMOMETER, X_LABEL, Y_LABEL, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, false);
 
 		add(jPanelGraphTemperature, BorderLayout.CENTER);
 		}

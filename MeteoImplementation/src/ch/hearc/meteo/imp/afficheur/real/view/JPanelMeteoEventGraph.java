@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -40,9 +42,10 @@ public class JPanelMeteoEventGraph extends JPanel
 	|*							Constructeurs							*|
 	\*------------------------------------------------------------------*/
 
-	public JPanelMeteoEventGraph(String title, String xLabel, String yLabel, Color plotColor, Color backgroundColor, Color plotBackground, boolean showLegend)
+	public JPanelMeteoEventGraph(String title, Icon icon, String xLabel, String yLabel, Color plotColor, Color backgroundColor, Color plotBackground, boolean showLegend)
 		{
 		this.title = title;
+		this.icon = icon;
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
 		this.n = JSLIDER_VALUE_MIN;
@@ -197,6 +200,8 @@ public class JPanelMeteoEventGraph extends JPanel
 		boxV.add(jSliderN);
 
 		add(boxV, BorderLayout.CENTER);
+
+		add(new JLabel(icon), BorderLayout.WEST);
 		}
 
 	private void control()
@@ -220,7 +225,6 @@ public class JPanelMeteoEventGraph extends JPanel
 		plot.setBackgroundPaint(plotBackground);
 		plot.setDomainGridlinePaint(Color.BLACK);
 		plot.setRangeGridlinePaint(Color.BLACK);
-
 
 		plot.setDomainCrosshairVisible(true);
 
@@ -364,6 +368,7 @@ public class JPanelMeteoEventGraph extends JPanel
 	private Color plotBackground;
 	private List<List<MeteoEvent>> meteoEvents;
 	private boolean showLegend;
+	private Icon icon;
 
 	//Outputs
 

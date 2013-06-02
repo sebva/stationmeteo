@@ -132,6 +132,7 @@ public class JPanelStation extends JPanel
 		mainBox.add(infosBox);
 		mainBox.add(Box.createHorizontalGlue());
 		mainBox.add(datasBox);
+		mainBox.add(Box.createHorizontalGlue());
 
 		Box infosTextParent = Box.createHorizontalBox();
 		Box infosText = Box.createVerticalBox();

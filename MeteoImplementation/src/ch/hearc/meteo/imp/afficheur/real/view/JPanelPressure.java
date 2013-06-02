@@ -39,9 +39,9 @@ public class JPanelPressure extends JPanel
 		{
 		jPanelDialPressure.refresh();
 
-		jLabelPressure.setText(String.format("Pression actuelle : %.2f", pressure.getPressure()) + JPanelDialPressure.UNITY);
+		jLabelPressure.setText(String.format("Pression actuelle :             %.2f", pressure.getPressure()) + JPanelDialPressure.UNITY);
 		jLabelSeeLevelPressure.setText(String.format("Pression niveau de la mer : %.2f", pressure.getSeaLevelPressure()) + JPanelDialPressure.UNITY);
-		jLabelMeanPressure.setText(String.format("Pression moyenne : %.2f", afficheurServiceMOO.getStatPression().getMovingAverage()) + JPanelDialPressure.UNITY);
+		jLabelMeanPressure.setText(String.format("Pression moyenne :           %.2f", afficheurServiceMOO.getStatPression().getMovingAverage()) + JPanelDialPressure.UNITY);
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Temps : ");
@@ -61,7 +61,7 @@ public class JPanelPressure extends JPanel
 
 		if (afficheurServiceMOO.getStatPression().getTrend() == Trend.up)
 			{
-jLabelTrend.setIcon(UP);
+			jLabelTrend.setIcon(UP);
 			jLabelTrend.setForeground(TREND_UP_COLOR);
 			}
 		else if (afficheurServiceMOO.getStatPression().getTrend() == Trend.down)
@@ -92,6 +92,7 @@ jLabelTrend.setIcon(UP);
 		jLabelSeeLevelPressure = new JLabel();
 		jLabelMeanPressure = new JLabel();
 		jLabelTrend = new JLabel();
+
 		boxText.add(jLabelPressure);
 		boxText.add(jLabelSeeLevelPressure);
 		boxText.add(jLabelMeanPressure);

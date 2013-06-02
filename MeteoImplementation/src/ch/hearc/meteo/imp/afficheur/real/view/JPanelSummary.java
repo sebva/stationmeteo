@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.Icon;
 import javax.swing.JPanel;
 
+import ch.hearc.meteo.imp.afficheur.real.ImageTools;
 import ch.hearc.meteo.imp.afficheur.real.moo.AfficheurServiceMOO;
 
 public class JPanelSummary extends JPanel
@@ -91,9 +93,9 @@ public class JPanelSummary extends JPanel
 
 		Box boxV = Box.createVerticalBox();
 
-		jPanelMeteoEventGraphTemperature = new JPanelMeteoEventGraph(TITLE_TEMPERATURE, X_LABEL, Y_LABEL_TEMPERATURE, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
-		jPanelMeteoEventGraphAltitude = new JPanelMeteoEventGraph(TITLE_ALTITUDE, X_LABEL, Y_LABEL_ALTITUDE, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
-		jPanelMeteoEventGraphPression = new JPanelMeteoEventGraph(TITLE_PRESSION, X_LABEL, Y_LABEL_PRESSION, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
+		jPanelMeteoEventGraphTemperature = new JPanelMeteoEventGraph(TITLE_TEMPERATURE, THERMOMETER, X_LABEL, Y_LABEL_TEMPERATURE, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
+		jPanelMeteoEventGraphAltitude = new JPanelMeteoEventGraph(TITLE_ALTITUDE, ALTITUDE, X_LABEL, Y_LABEL_ALTITUDE, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
+		jPanelMeteoEventGraphPression = new JPanelMeteoEventGraph(TITLE_PRESSION, PRESSURE, X_LABEL, Y_LABEL_PRESSION, JFrameAfficheurService.FOREGROUND_COLOR, JFrameAfficheurService.BACKGROUND_COLOR, JFrameAfficheurService.PLOT_BACKGROUND_COLOR, true);
 
 		add(boxV, BorderLayout.CENTER);
 
@@ -130,4 +132,12 @@ public class JPanelSummary extends JPanel
 	private static final String Y_LABEL_TEMPERATURE = "°C";
 	private static final String Y_LABEL_ALTITUDE = "m";
 	private static final String Y_LABEL_PRESSION = "hPa";
+
+	private static final String THERMOMETER_PATH = "images/thermometer.png";
+	private static final String PRESSURE_PATH = "images/pressure.png";
+	private static final String ALTITUDE_PATH = "images/altitude.png";
+
+	public static final Icon THERMOMETER = ImageTools.loadIconJar(THERMOMETER_PATH, true);
+	private static final Icon PRESSURE = ImageTools.loadIconJar(PRESSURE_PATH, true);
+	private static final Icon ALTITUDE = ImageTools.loadIconJar(ALTITUDE_PATH, true);
 	}

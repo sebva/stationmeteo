@@ -108,6 +108,7 @@ public class JFrameAfficheurService extends JFrame
 	private void geometry()
 		{
 		tabbedPane = new JTabbedPane();
+		tabbedPane.setUI(new MeteoTabbedPaneUI());
 		add(tabbedPane);
 		jPanelSummary = new JPanelSummary();
 		tabbedPane.add("Summary", jPanelSummary);
