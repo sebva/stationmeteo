@@ -29,31 +29,28 @@ public class JFrameAfficheurService extends JFrame
 		geometry();
 		control();
 		apparence();
-		if (isCentral)
+		Thread thread = new Thread(new Runnable()
 			{
-			Thread thread = new Thread(new Runnable()
-				{
 
-					@Override
-					public void run()
+				@Override
+				public void run()
+					{
+					while(true)
 						{
-						while(true)
+						try
 							{
-							try
-								{
-								verifyStation();
-								Thread.sleep(POOLING_DELAY);
-								}
-							catch (Exception e)
-								{
-								e.printStackTrace();
-								}
+							verifyStation();
+							Thread.sleep(POOLING_DELAY);
+							}
+						catch (Exception e)
+							{
+							e.printStackTrace();
 							}
 						}
-				});
+					}
+			});
 
-			thread.start();
-			}
+		thread.start();
 		}
 
 	/*------------------------------------------------------------------*\
@@ -93,7 +90,10 @@ public class JFrameAfficheurService extends JFrame
 
 	public void setPCLocal(PCLocal pc)
 		{
-		this.pc = pc;
+		if (this.pc == null && pc != null)
+			{
+			this.pc = pc;
+			}
 		}
 
 	public PCLocal getPCLocal()
