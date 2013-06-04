@@ -99,7 +99,7 @@ public class JPanelSwitzerland extends JPanel
 			}
 		g2d.setColor(Color.red);
 		Point point = positionOnScreenForCoordinate(afficheurServiceMOO.getLongitude(), afficheurServiceMOO.getLatitude());
-		g2d.fillOval(point.x, point.y, 5, 5);
+		g2d.fillOval(point.x - 3, point.y - 3, 6, 6);
 		}
 
 	private Point positionOnScreenForCoordinate(final double LONGITUDE, final double LATITUDE)
@@ -127,7 +127,7 @@ public class JPanelSwitzerland extends JPanel
 	\*------------------------------*/
 
 	private static final double MIN_LONGITUDE = 5.95459;
-	private static final double MAX_LONGITUDE = 10.992201;
+	private static final double MAX_LONGITUDE = 10.541085;
 	private static final double MIN_LATITUDE = 45.817913;
 	private static final double MAX_LATITUDE = 47.798485;
 	private static final String SWITZERLAND_PATH = "images/switzerland.png";
