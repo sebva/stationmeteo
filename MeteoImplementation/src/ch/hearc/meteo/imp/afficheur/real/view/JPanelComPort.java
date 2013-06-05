@@ -10,11 +10,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.swing.Box;
@@ -55,6 +57,7 @@ public class JPanelComPort extends JPanel
 		apparence();
 
 		populateBanList();
+		detectedListModel.addElement(new SimpleEntry<>(SIMULATEUR, true));
 		}
 
 	/*------------------------------------------------------------------*\
@@ -283,7 +286,9 @@ public class JPanelComPort extends JPanel
 					int nbPorts = allPorts.length - bannedPorts.size();
 					int current = 0;
 
-					Map<String, Boolean> map = new TreeMap<>();
+					SortedMap<String, Boolean> map = new TreeMap<>();
+					map.put(SIMULATEUR, true);
+					
 					for(String port:allPorts)
 						{
 						if (!bannedPorts.contains(port) && !connectedPorts.contains(port))
@@ -334,17 +339,30 @@ public class JPanelComPort extends JPanel
 
 	private void addStation(Entry<String, Boolean> port)
 		{
-		detectedListModel.removeElement(port);
-		connectedListModel.addElement(port);
-
 		PCLocal pc = JFrameAfficheurService.getInstance(false).getPCLocal();
-		pc.addStation(port.getKey());
+		
+		// Real
+		if(!SIMULATEUR.equals(port.getKey()))
+			{
+			detectedListModel.removeElement(port);
+			connectedListModel.addElement(port);
+			
+			pc.addStation(port.getKey(), true);
+			}
+		// Simulator
+		else
+			{
+			String id = SIMULATEUR + " " + noSimulateur++;
+			connectedListModel.addElement(new SimpleEntry<String, Boolean>(id, true));
+			pc.addStation(id, false);
+			}
 		}
 
 	private void removeStation(final Entry<String, Boolean> port)
 		{
 		connectedListModel.removeElement(port);
-		detectedListModel.addElement(port);
+		if(!port.getKey().startsWith(SIMULATEUR))
+			detectedListModel.addElement(port);
 
 		PCLocal pc = JFrameAfficheurService.getInstance(false).getPCLocal();
 		pc.removePortCom(port.getKey());
@@ -368,4 +386,8 @@ public class JPanelComPort extends JPanel
 	private JLabel lblDetectedPorts;
 	private JLabel lblPortsToBan;
 	private JLabel lblConnectedPorts;
+	private int noSimulateur = 1;
+	
+	// Constants
+	private static final String SIMULATEUR = "Simulateur";
 	}

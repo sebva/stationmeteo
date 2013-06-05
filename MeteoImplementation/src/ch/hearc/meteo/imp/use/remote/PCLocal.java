@@ -62,7 +62,7 @@ public class PCLocal implements PC_I
 			}
 		}
 
-	public void addStation(String portCom)
+	public void addStation(String portCom, boolean isReal)
 		{
 		if (!portComs.contains(portCom))
 			{
@@ -71,7 +71,7 @@ public class PCLocal implements PC_I
 			try
 				{
 				//SERVER
-				MeteoService_I meteoService = MeteoServiceFactory.create(portCom);
+				MeteoService_I meteoService = MeteoServiceFactory.create(portCom, isReal);
 				meteoServices.add(meteoService);
 				MeteoServiceWrapper meteoServiceWrapper = new MeteoServiceWrapper(meteoService);
 				RmiURL rmiURL = new RmiURL(IdTools.createID(PREFIX));
