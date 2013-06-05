@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -270,13 +272,21 @@ public class JPanelComPort extends JPanel
 					banListModel.copyInto(allPorts);
 					List<String> bannedPorts = banList.getSelectedValuesList();
 
+					Enumeration<Entry<String, Boolean>> connectedPortsEnum = connectedListModel.elements();
+					List<String> connectedPorts = new ArrayList<>(connectedListModel.size());
+
+					while(connectedPortsEnum.hasMoreElements())
+						{
+						connectedPorts.add(connectedPortsEnum.nextElement().getKey());
+						}
+
 					int nbPorts = allPorts.length - bannedPorts.size();
 					int current = 0;
 
 					Map<String, Boolean> map = new TreeMap<>();
 					for(String port:allPorts)
 						{
-						if (!bannedPorts.contains(port))
+						if (!bannedPorts.contains(port) && !connectedPorts.contains(port))
 							{
 							map.put(port, detectionService.isStationMeteoAvailable(port));
 							setProgress((100 * ++current) / nbPorts);

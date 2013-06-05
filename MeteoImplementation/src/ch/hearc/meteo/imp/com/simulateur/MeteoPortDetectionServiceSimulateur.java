@@ -57,7 +57,7 @@ public class MeteoPortDetectionServiceSimulateur implements MeteoPortDetectionSe
 	public List<String> findPortSerie()
 		{
 		List<String> allPorts = new LinkedList<>();
-		for(int i = 1; i <= Math.random() * 5 + 1; i++)
+		for(int i = 1; i <= 10; i++)
 			{
 			allPorts.add("COM" + i);
 			}
