@@ -243,18 +243,24 @@ public abstract class MeteoService_A implements MeteoService_I ,MeteoServiceCall
 							if (timeManagerTemperature.isTimeElapse())
 								{
 								askTemperatureAsync();
+								temperatureDT = meteoServiceOptions.getTemperatureDT();
+								timeManagerTemperature.setDt(temperatureDT);
 								timeManagerTemperature.reset();
 								}
 
 							if (timeManagerAltitude.isTimeElapse())
 								{
 								askAltitudeAsync();
+								altitudeDT = meteoServiceOptions.getAltitudeDT();
+								timeManagerAltitude.setDt(altitudeDT);
 								timeManagerAltitude.reset();
 								}
 
 							if (timeManagerPression.isTimeElapse())
 								{
 								askPressionAsync();
+								pressionDT = meteoServiceOptions.getPressionDT();
+								timeManagerPression.setDt(pressionDT);
 								timeManagerPression.reset();
 								}
 							}

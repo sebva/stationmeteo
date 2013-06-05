@@ -31,6 +31,11 @@ public class TimeManager
 		previousTime = currentTime();
 		}
 
+	public void setDt(long dt)
+		{
+		this.dt = dt;
+		}
+
 	/*------------------------------------------------------------------*\
 	|*							Methodes Private						*|
 	\*------------------------------------------------------------------*/
