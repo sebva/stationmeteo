@@ -96,35 +96,45 @@ public class JPanelComPort extends JPanel
 
 		detectionProgress = new JProgressBar(0, 100);
 
-		Box mainBox = Box.createHorizontalBox();
-		Box leftBox = Box.createVerticalBox();
-		leftBox.add(lblPortsToBan);
+		Box mainBox = Box.createVerticalBox();
+		Box listsBox = Box.createHorizontalBox();
+		
+		Box creditBox = Box.createHorizontalBox();
+		creditBox.add(new JLabel(ImageTools.loadIconJar("images/hearc.png", true)));
+		creditBox.add(Box.createHorizontalStrut(30));
+		creditBox.add(new JLabel("<html><b style=\"color:#f1c40f;\">Projet station météo<br />Alexandre Perez - INF2dlm-a<br />Diego Antognini - INF2dlm-a<br />Sébastien Vaucher - INF2dlm-b<br /><br />Copyright &copy; HE-Arc - 2013<b></html>"));
+		mainBox.add(creditBox);
+		mainBox.add(Box.createVerticalStrut(20));
+		
+		Box banBox = Box.createVerticalBox();
+		banBox.add(lblPortsToBan);
 		JPanel jPanelBan = new JPanel(new BorderLayout());
 		jPanelBan.add(new JScrollPane(banList), BorderLayout.CENTER);
 		jPanelBan.add(refreshBanListButton, BorderLayout.SOUTH);
-		leftBox.add(jPanelBan);
-		leftBox.add(Box.createVerticalStrut(15));
-		leftBox.add(lblDetectedPorts);
-		leftBox.add(detectionProgress);
+		banBox.add(jPanelBan);
+		listsBox.add(banBox);
+		
+		listsBox.add(Box.createHorizontalStrut(15));
+		
+		Box detectedBox = Box.createVerticalBox();
+		detectedBox.add(lblDetectedPorts);
+		detectedBox.add(detectionProgress);
 		JPanel jPanelDetection = new JPanel(new BorderLayout());
 		jPanelDetection.add(new JScrollPane(detectedList), BorderLayout.CENTER);
 		jPanelDetection.add(detectButton, BorderLayout.SOUTH);
-		leftBox.add(jPanelDetection);
-		leftBox.add(Box.createVerticalStrut(20));
-		leftBox.add(lblConnectedPorts);
+		detectedBox.add(jPanelDetection);
+		listsBox.add(detectedBox);
+		
+		listsBox.add(Box.createHorizontalStrut(15));
+
+		Box connectedBox = Box.createVerticalBox();
+		connectedBox.add(lblConnectedPorts);
 		JPanel jPanelConnectedPorts = new JPanel(new BorderLayout());
 		jPanelConnectedPorts.add(new JScrollPane(connectedList), BorderLayout.CENTER);
-		leftBox.add(jPanelConnectedPorts);
+		connectedBox.add(jPanelConnectedPorts);
+		listsBox.add(connectedBox);
 
-		Box rightBox = Box.createVerticalBox();
-		rightBox.add(Box.createVerticalGlue());
-		rightBox.add(new JLabel("<html><b style=\"color:#f1c40f;\">Projet station météo<br />Alexandre Perez - INF2dlm-a<br />Diego Antognini - INF2dlm-a<br />Sébastien Vaucher - INF2dlm-b<br /><br />Copyright &copy; HE-Arc - 2013<b></html>"));
-		rightBox.add(Box.createVerticalStrut(30));
-		rightBox.add(new JLabel(ImageTools.loadIconJar("images/hearc.png", true)));
-
-		mainBox.add(leftBox);
-		mainBox.add(Box.createHorizontalStrut(50));
-		mainBox.add(rightBox);
+		mainBox.add(listsBox);
 
 		add(mainBox);
 		}
