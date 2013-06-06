@@ -162,6 +162,12 @@ public class MeteoTabbedPaneUI extends BasicTabbedPaneUI
 		}
 
 	@Override
+	protected int calculateTabAreaHeight(int tabPlacement, int horizRunCount, int maxTabHeight)
+		{
+		return buttonHeight + (buttonHeight / 2) + 6;
+		}
+
+	@Override
 	protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics)
 		{
 		return super.calculateTabWidth(tabPlacement, tabIndex, metrics) + buttonHeight;
